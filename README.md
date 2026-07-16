@@ -20,6 +20,6 @@ Symlink the skills into local harness directories for development:
 
 ## Skills
 
-### In Progress
+### Engineering
 
-- **[eval-planner](./skills/in-progress/eval-planner/SKILL.md)** - Conversationally create and maintain evaluation analysis, plans, progress tables, and optional tracker tickets.
+- **[eval-planner](./skills/engineering/eval-planner/SKILL.md)** - Conversationally create and maintain eval, safety, quality, autonomy-readiness, progress, and optional tracker plans.

@@ -1,0 +1,12 @@
+{
+  "name": "ai-skillz",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agent skills for planning and operating AI work",
+  "license": "MIT",
+  "scripts": {
+    "list": "./scripts/list-skills.sh",
+    "link": "./scripts/link-skills.sh"
+  }
+}
+

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Eval Planner"
+  short_description: "Plan eval work with tracking tables"
+  default_prompt: "Use $eval-planner to turn this AI feature idea into an analysis, implementation plan, progress tracker, and optional tickets."
+policy:
+  allow_implicit_invocation: false

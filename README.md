@@ -30,3 +30,7 @@ Symlink the skills into local harness directories for development:
 - **[eval-run-regressions](./skills/engineering/eval-run-regressions/SKILL.md)** - Implement reproducible candidate comparisons and CI gates.
 - **[eval-mine-traces](./skills/engineering/eval-mine-traces/SKILL.md)** - Find failure clusters and regression cases in traces.
 - **[eval-optimize](./skills/engineering/eval-optimize/SKILL.md)** - Tune prompts and agent components against protected evals.
+
+### Productivity
+
+- **[unslop](./skills/productivity/unslop/SKILL.md)** - Remove AI writing tells while preserving meaning and voice.

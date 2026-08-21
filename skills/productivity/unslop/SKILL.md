@@ -1,6 +1,6 @@
 ---
 name: unslop
-description: Cut AI tells from any writing. Must always apply.
+description: Cut AI tells from all writing. Apply to marketing copy, PR, blog posts, long-form prose, articles, docs, and other text.
 ---
 
 # Unslop

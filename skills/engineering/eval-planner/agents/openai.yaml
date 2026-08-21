@@ -1,6 +1,6 @@
 interface:
   display_name: "Eval Planner"
-  short_description: "Plan AI evals, safety, and autonomy"
-  default_prompt: "Use $eval-planner to turn this AI feature into an eval, safety, quality, autonomy-readiness, and implementation plan."
+  short_description: "Coordinate an end-to-end eval program"
+  default_prompt: "Use $eval-planner to coordinate this evaluation program and maintain its decision record."
 policy:
   allow_implicit_invocation: false

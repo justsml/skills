@@ -22,4 +22,11 @@ Symlink the skills into local harness directories for development:
 
 ### Engineering
 
-- **[eval-planner](./skills/engineering/eval-planner/SKILL.md)** - Conversationally create and maintain eval, safety, quality, autonomy-readiness, progress, and optional tracker plans.
+- **[eval-planner](./skills/engineering/eval-planner/SKILL.md)** - Coordinate a complete eval program and its decision record.
+- **[eval-design](./skills/engineering/eval-design/SKILL.md)** - Design datasets, metric bundles, slices, and release gates.
+- **[eval-build-dataset](./skills/engineering/eval-build-dataset/SKILL.md)** - Curate versioned evaluation cases with protected splits.
+- **[eval-build-scorer](./skills/engineering/eval-build-scorer/SKILL.md)** - Implement auditable deterministic, judge, or human scorers.
+- **[eval-validate-scorer](./skills/engineering/eval-validate-scorer/SKILL.md)** - Calibrate and stress-test learned evaluators.
+- **[eval-run-regressions](./skills/engineering/eval-run-regressions/SKILL.md)** - Implement reproducible candidate comparisons and CI gates.
+- **[eval-mine-traces](./skills/engineering/eval-mine-traces/SKILL.md)** - Find failure clusters and regression cases in traces.
+- **[eval-optimize](./skills/engineering/eval-optimize/SKILL.md)** - Tune prompts and agent components against protected evals.

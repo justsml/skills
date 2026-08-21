@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Eval Scorer"
+  short_description: "Implement auditable eval measurements"
+  default_prompt: "Use $eval-build-scorer to implement the cheapest valid scorer for this metric contract."

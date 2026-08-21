@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eval Optimize"
+  short_description: "Tune AI systems against held-out evals"
+  default_prompt: "Use $eval-optimize to improve this system through a bounded eval-driven search loop."

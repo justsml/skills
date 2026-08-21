@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eval Design"
+  short_description: "Design metrics, datasets, and gates"
+  default_prompt: "Use $eval-design to turn these product claims and risks into a defensible evaluation contract."

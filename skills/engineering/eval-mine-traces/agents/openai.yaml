@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mine Eval Traces"
+  short_description: "Find failures and regression cases in traces"
+  default_prompt: "Use $eval-mine-traces to turn these traces into failure clusters and reviewed regression candidates."

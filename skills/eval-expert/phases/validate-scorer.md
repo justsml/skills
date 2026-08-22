@@ -2,6 +2,8 @@
 
 Treat the scorer as a measurement instrument. Its prompt can sound sensible while its decisions are useless.
 
+Before building a calibration set, see `SKILL.md` § Protect the budget and the run for the smoke-slice, retry, and abort guardrails this phase runs under.
+
 ## Define the construct
 
 Write the rubric as observable criteria with anchored examples. Separate dimensions that can disagree. State what evidence the scorer may use, how it handles missing context, and when it must abstain. Prefer pairwise comparison for fine candidate distinctions and direct scoring when an absolute threshold is the real decision.

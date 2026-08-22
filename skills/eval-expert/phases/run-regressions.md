@@ -2,6 +2,8 @@
 
 Turn an evaluation contract into a reproducible experiment and a decision, not a pile of scores.
 
+Before executing, see `SKILL.md` § Protect the budget and the run for the smoke-slice, retry, and abort guardrails this phase runs under.
+
 ## Establish the run identity
 
 Capture dataset revision, candidate configuration, prompts, model and parameters, tools, retrieval inputs, scorer versions, random seeds when supported, concurrency, retries, and environment. Preserve raw outputs and scorer rationales needed to audit failures. Redact secrets and sensitive user data before sending them to an external evaluator.

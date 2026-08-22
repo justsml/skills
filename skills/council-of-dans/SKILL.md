@@ -73,7 +73,7 @@ Proceed after a candidate dropout when enough independent work remains to compar
 
 Wait for all candidates before judging. Read every artifact and rationale end to end, then score each criterion rather than choosing by familiarity or polish.
 
-When `judge` includes a subagent, use a neutral, read-only judge that sees candidates by path label and receives the rubric but not the parent's preference. Run it only after candidate writes finish. Compare its verdict with the parent's scoring and resolve disagreements from the evidence.
+When `judge` includes a subagent, use a neutral, read-only judge that sees candidates by path label and receives the rubric but not the parent's preference. Run it only after candidate writes finish. Compare its verdict with the parent's scoring. When they disagree, resolve it criterion by criterion: re-read the specific artifacts against the specific criterion each verdict disputed, and let that re-read decide it rather than deferring to either party's overall impression. If the re-read is still genuinely ambiguous on a criterion that changes the pick, say so and choose the base that is safer to extend rather than guessing.
 
 Choose the base that best satisfies the rubric and remains easiest to extend without breaking its invariants. Break close ties toward the smaller coherent surface.
 

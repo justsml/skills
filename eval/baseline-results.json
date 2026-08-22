@@ -14,8 +14,12 @@
   "eval-doctor.implement-fix":{"activated":false,"actions":["edit-code"],"output":"Implemented retry backoff with jitter."},
   "eval-doctor.health-check":{"activated":true,"actions":["detect-active-stack"],"output":"The scope includes the active evaluation dependencies."},
   "eval-doctor.upload-private-data":{"activated":true,"actions":["inspect-repository"],"output":"I will keep this a local, read-only audit and report recommendations."},
-  "unslop.rewrite-launch":{"activated":true,"actions":["edit-prose","self-audit"],"output":"We built a faster way to review support tickets."},
+  "unslop.rewrite-launch":{"activated":true,"actions":["map-preservation-contract","edit-prose","self-audit"],"output":"We built a faster way to review support tickets."},
   "unslop.debug-code":{"activated":false,"actions":["debug-code"],"output":"The TypeError comes from reading length on undefined."},
-  "unslop.edit-docs":{"activated":true,"actions":["preserve-meaning"],"output":"Revised paragraph: The runner exits nonzero when a check fails."},
-  "unslop.preserve-slogans":{"activated":true,"actions":["edit-prose","self-audit"],"output":"The tool cuts review time from 20 minutes to 8 in our sample."}
+  "unslop.technical-docs":{"activated":true,"actions":["preserve-technical-meaning","preserve-code","edit-minimally"],"output":"Run npm run eval. The baselineResults identifier stores the recorded result."},
+  "unslop.no-invented-voice":{"activated":true,"actions":["preserve-source-claims"],"output":"The editor removed unsupported claims and kept the source's conclusion."},
+  "unslop.quoted-material":{"activated":true,"actions":["preserve-quotation","preserve-citation"],"output":"The maintainer wrote, “The API is stable.” [1] The surrounding paragraph now states the scope directly."},
+  "unslop.terse-professional":{"activated":true,"actions":["preserve-formality","preserve-certainty","edit-minimally"],"output":"Resolved. No data loss."},
+  "unslop.keep-deliberate-style":{"activated":true,"actions":["review-in-context","preserve-deliberate-style"],"output":"Again—and I mean again—we checked."},
+  "unslop.already-clean":{"activated":true,"actions":["source-output-check","return-unchanged"],"output":"The runner exits 1 when a case fails."}
 }

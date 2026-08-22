@@ -1,0 +1,4 @@
+interface:
+  display_name: "Eval Doctor"
+  short_description: "Audit an eval stack against current best practices"
+  default_prompt: "Use $eval-doctor to audit this repository’s evaluation stack and show me the highest-value improvements."

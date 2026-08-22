@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Council of Dans
 
-Run independent attempts at the same task, judge them against a task-specific rubric, choose the strongest base, graft in compatible strengths, and verify the synthesis.
+Run independent solution families against the same task, judge them with a task-specific rubric, choose the strongest base, graft compatible strengths, and verify the synthesis.
 
 ## Inputs
 
@@ -20,11 +20,20 @@ Honor user-supplied knobs. Infer the rest:
 - `isolation`: worktrees, separate directories, or read-only proposals
 - `artifacts`: output and synthesis-note paths
 
-Default `N` to the number of high-confidence, materially useful personas, bounded to 4–6. Do not pad the council with weak matches. If fewer than four personas are useful, use the smaller panel and state why. Ask only when a missing knob would materially change the result; otherwise proceed with recorded assumptions.
+Start with `N = 2` unless the user supplies a panel size. Treat a user-supplied size, personas, and concurrency as authoritative when they are safe and the environment supports them. Ask only when a missing knob would materially change the result. Record inferred settings.
 
-## Select the council
+## Define independent approaches
 
-Each candidate owns the complete task. Its persona changes what it notices, what it distrusts, and what it optimizes. Give the role enough theatrical force to pull the candidate away from the most obvious solution, but keep its mandate concrete.
+Each candidate owns the complete task and tests a different solution hypothesis. Define each candidate by at least one explicit source of independence:
+
+- a different architecture or decomposition;
+- a different governing constraint or tradeoff;
+- a different hypothesis about the cause or best route;
+- a materially different compatibility or migration strategy.
+
+Persona wording alone does not make candidates independent. Use a persona only as a lens within a named solution family. For each candidate, record one sentence explaining what decision it could change. If two briefs would likely produce the same design, combine them or drop one.
+
+Use these lenses only when they sharpen a distinct approach:
 
 Start from these general lenses and retain only strong matches:
 
@@ -40,7 +49,7 @@ Start from these general lenses and retain only strong matches:
 
 Add task-specific characters only when the task gives them something distinct to find. Examples include the Security Paranoid, Privacy Zealot, Performance Wizard, Data Modeler, Algorithm Specialist, Accessibility Advocate, Test Saboteur, or a sharp domain expert. Use a Clean-slate Radical only when redesign is genuinely in scope. That candidate must label compatibility breaks, migration work, data-loss risk, and irreversible choices.
 
-The name should activate a worldview. The mandate keeps it useful. Tell candidates to stay in character while still delivering the whole artifact. Exclude personas whose likely contribution substantially overlaps another panelist. Record one sentence per selected persona explaining the distinct solution pressure it adds; those sentences determine `N`.
+The name should activate a worldview. The mandate keeps it useful. Tell candidates to stay in character while still delivering the whole artifact.
 
 Use one capable model across candidates unless the user or environment specifies otherwise. For coding candidates, prefer low reasoning effort; raise it only when measured complexity warrants it. For planning, architecture, and judging, prefer medium or high reasoning effort.
 
@@ -50,24 +59,24 @@ Before spawning:
 
 1. Name the complete artifact each candidate must produce.
 2. Write 3–6 task-specific, gradeable criteria.
-3. Select the personas and derive `N`.
+3. Write two independent solution-family briefs and explain the decision value of each.
 4. Choose safe isolation. Candidates that write files need separate worktrees or directories; candidates must not edit the same files concurrently.
 5. Record the concurrency and reasoning settings.
 
-The frame is complete when every candidate can receive the same task contract, one distinct persona, and one isolated output location.
+The frame is complete when every candidate can receive the same task contract, one distinct solution-family brief, and one isolated output location.
 
 ## Fan out
 
-Launch an initial wave of at most four parallel subagents, further limited by available system slots and resources. Each receives:
+Launch the initial two candidates, limited by available system slots and resources. Each receives:
 
 - the common task and grounding context;
-- one persona and its emphasis;
+- one solution hypothesis and any useful persona lens;
 - its isolated output path;
 - instructions to produce the complete artifact plus a short rationale naming alternatives considered and rejected.
 
-Queue remaining candidates as slots free up. After the first wave, increase the concurrency cap to at most eight only when the environment supports it and observed orchestration overhead, memory, CPU, tool contention, and failure rate indicate that doubling is safe. Otherwise retain or reduce the cap. Never exceed platform limits or sacrifice isolation to reach a target number.
+After the first two candidates finish, name any unresolved decision that another independent approach could settle. Add one candidate only when its brief tests that uncertainty and could change the selected base or synthesis. Stop when candidates converge, the rubric separates them, or another brief would repeat an existing solution family. Never exceed a user-supplied panel size or platform limits, and never sacrifice isolation to reach a target number.
 
-Proceed after a candidate dropout when enough independent work remains to compare; record the dropout.
+If a candidate drops out, record it and decide whether the remaining artifacts still represent at least two materially different approaches. Proceed when they do. Replace the candidate when they do not and another run is safe.
 
 ## Judge and pick
 
@@ -91,7 +100,8 @@ Verify the synthesized artifact through the task's real public seam. A council d
 
 Return one synthesized artifact and a concise synthesis note containing:
 
-- selected personas, `N`, concurrency, and reasoning settings;
+- solution families, personas, `N`, concurrency, reasoning settings, and why each candidate had decision value;
+- expansion or stop decision after the initial pair;
 - the chosen base and criterion-level reason;
 - grafts and their source candidates;
 - notable rejections and dropouts;

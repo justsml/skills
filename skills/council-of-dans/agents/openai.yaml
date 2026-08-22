@@ -1,6 +1,6 @@
 interface:
   display_name: "Council of Dans"
-  short_description: "Run rival expert attempts, then synthesize the best"
-  default_prompt: "Use $council-of-dans to run independent, persona-driven attempts at this task and synthesize the strongest result."
+  short_description: "Compare distinct solutions, then synthesize the best"
+  default_prompt: "Use $council-of-dans to compare independent solution families for this task and synthesize the strongest result."
 policy:
   allow_implicit_invocation: false

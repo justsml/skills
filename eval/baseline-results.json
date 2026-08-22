@@ -1,8 +1,11 @@
 {
-  "council-of-dans.compare-designs":{"activated":true,"actions":["frame-rubric","run-independent-candidates","judge-candidates","synthesize","verify"],"output":"Chosen base: candidate B. Verification: public tests pass."},
+  "council-of-dans.compare-designs":{"activated":true,"actions":["frame-rubric","define-solution-families","run-independent-candidates","judge-candidates","synthesize","verify"],"output":"Chosen base: candidate B. Verification: public tests pass."},
   "council-of-dans.simple-edit":{"activated":false,"actions":["edit-file"],"output":"README typo fixed."},
   "council-of-dans.pressure-test":{"activated":true,"actions":["frame-rubric","judge-candidates"],"output":"Recommendation: use the staged migration."},
   "council-of-dans.skip-comparison":{"activated":true,"actions":["isolate-candidates","read-all-candidates","judge-candidates"],"output":"Chosen base: the smallest compatible design."},
+  "council-of-dans.cost-aware-expansion":{"activated":true,"actions":["start-two-candidates","assess-unresolved-decision","stop-redundant-expansion"],"output":"Expansion decision: stop after two because another brief would repeat the same architecture."},
+  "council-of-dans.candidate-dropout":{"activated":true,"actions":["record-dropout","check-independent-approaches"],"output":"Dropout: candidate C failed; the two remaining solution families are independent, so judging can proceed."},
+  "council-of-dans.user-settings":{"activated":true,"actions":["honor-user-panel-size","honor-user-personas","honor-user-concurrency"],"output":"N: 3. Concurrency: 2. Using the requested personas."},
   "eval-expert.design-program":{"activated":true,"actions":["detect-platform","design-evaluation","maintain-decision-record"],"output":"The release decision uses a calibrated quality gate. The next action has an owner."},
   "eval-expert.unit-tests":{"activated":false,"actions":["write-tests"],"output":"Added unit tests for invalid dates."},
   "eval-expert.score-drift":{"activated":true,"actions":["validate-scorer"],"output":"Validate the scorer against reviewer labels before tuning."},

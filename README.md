@@ -21,12 +21,5 @@ Symlink the skills into local harness directories for development:
 ## Skills
 
 - **[council-of-dans](./skills/council-of-dans/SKILL.md)** - Run independent, persona-driven attempts at a task and synthesize the strongest result.
-- **[eval-planner](./skills/eval-planner/SKILL.md)** - Coordinate a complete eval program and its decision record.
-- **[eval-design](./skills/eval-design/SKILL.md)** - Design datasets, metric bundles, slices, and release gates.
-- **[eval-build-dataset](./skills/eval-build-dataset/SKILL.md)** - Curate versioned evaluation cases with protected splits.
-- **[eval-build-scorer](./skills/eval-build-scorer/SKILL.md)** - Implement auditable deterministic, judge, or human scorers.
-- **[eval-validate-scorer](./skills/eval-validate-scorer/SKILL.md)** - Calibrate and stress-test learned evaluators.
-- **[eval-run-regressions](./skills/eval-run-regressions/SKILL.md)** - Implement reproducible candidate comparisons and CI gates.
-- **[eval-mine-traces](./skills/eval-mine-traces/SKILL.md)** - Find failure clusters and regression cases in traces.
-- **[eval-optimize](./skills/eval-optimize/SKILL.md)** - Tune prompts and agent components against protected evals.
+- **[eval-expert](./skills/eval-expert/SKILL.md)** - Coordinate a complete eval program — design, datasets, scorers, regressions, trace mining, and optimization — from one decision record.
 - **[unslop](./skills/unslop/SKILL.md)** - Remove AI writing tells while preserving meaning and voice.

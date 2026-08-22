@@ -1,8 +1,3 @@
----
-name: eval-run-regressions
-description: Implement or operate reproducible AI regression suites across prompts, models, tools, retrieval, and agents. Use when the user needs executable eval cases, candidate comparisons, CI gates, or failure reports.
----
-
 # Run eval regressions
 
 Turn an evaluation contract into a reproducible experiment and a decision, not a pile of scores.
@@ -23,7 +18,7 @@ Report coverage, metric distributions, uncertainty, per-slice deltas, critical g
 
 Store durable failures with expected behavior and provenance. Keep experimental output out of the regression corpus until reviewed, so a bad scorer cannot write its own ground truth.
 
-For framework setup and command hints, read [the platform notes](references/platforms.md) only for the selected platform. Follow the repository's existing framework and scripts when present.
+For framework setup and command hints, read [the platform notes](../references/platforms/run-regressions.md) only for the selected platform. Follow the repository's existing framework and scripts when present.
 
 ## Completion
 

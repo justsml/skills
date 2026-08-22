@@ -1,4 +1,0 @@
-interface:
-  display_name: "Validate Eval Scorer"
-  short_description: "Calibrate and stress-test eval judges"
-  default_prompt: "Use $eval-validate-scorer to test whether this scorer is valid enough for the decision it will influence."

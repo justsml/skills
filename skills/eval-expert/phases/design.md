@@ -1,8 +1,3 @@
----
-name: eval-design
-description: Design or review datasets, metric bundles, slices, thresholds, and release gates for AI systems. Use when product claims need measurable evaluation coverage or an existing eval may reward the wrong behavior.
----
-
 # Eval design
 
 Build an evaluation contract that can distinguish a useful change from a merely higher score.
@@ -34,7 +29,7 @@ Keep development and held-out sets separate. Record provenance, privacy constrai
 
 Try to break the design. Look for construct mismatch, synthetic-only coverage, label leakage, contamination, arbitrary thresholds, one-path trajectory grading, style-sensitive judges, correlated metrics, and slices too small to support a claim.
 
-If implementation depends on a particular service or framework, read [the platform notes](references/platforms.md) only for the selected platform.
+If implementation depends on a particular service or framework, read [the platform notes](../references/platforms/design.md) only for the selected platform.
 
 ## Completion
 

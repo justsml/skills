@@ -1,4 +1,0 @@
-interface:
-  display_name: "Run Eval Regressions"
-  short_description: "Build and run reproducible eval suites"
-  default_prompt: "Use $eval-run-regressions to implement and run this evaluation as a reproducible candidate comparison."

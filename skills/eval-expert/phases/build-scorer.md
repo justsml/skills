@@ -1,8 +1,3 @@
----
-name: eval-build-scorer
-description: Implement deterministic checks, model judges, or human-review protocols for AI evaluations. Use when a metric definition needs an executable scorer with auditable evidence and a stable contract.
----
-
 # Build an eval scorer
 
 Implement the cheapest scorer that measures the intended construct and exposes enough evidence to audit a wrong decision.
@@ -17,9 +12,9 @@ For a model judge, use observable rubric anchors, concise cited evidence, and st
 
 Cache only under a complete identity that includes scorer code or prompt, judge model and settings, example, candidate output, references, and relevant trace. A changed identity is a cache miss.
 
-Hand the scorer and known good, bad, boundary, and adversarial examples to `eval-validate-scorer` before it can guide tuning or gating.
+Hand the scorer and known good, bad, boundary, and adversarial examples to `phases/validate-scorer.md` before it can guide tuning or gating.
 
-If implementation depends on a particular service or framework, read [the platform notes](references/platforms.md) only for the selected platform.
+If implementation depends on a particular service or framework, read [the platform notes](../references/platforms/build-scorer.md) only for the selected platform.
 
 ## Completion
 

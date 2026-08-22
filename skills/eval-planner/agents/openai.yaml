@@ -1,6 +1,0 @@
-interface:
-  display_name: "Eval Planner"
-  short_description: "Coordinate an end-to-end eval program"
-  default_prompt: "Use $eval-planner to coordinate this evaluation program and maintain its decision record."
-policy:
-  allow_implicit_invocation: false

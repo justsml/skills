@@ -1,0 +1,6 @@
+interface:
+  display_name: "Eval Expert"
+  short_description: "Coordinate a complete eval program"
+  default_prompt: "Use $eval-expert to coordinate this evaluation program and maintain its decision record."
+policy:
+  allow_implicit_invocation: false

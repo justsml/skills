@@ -1,15 +1,10 @@
----
-name: eval-optimize
-description: Improve prompts, policies, tools, retrieval, or agent configuration through an eval-driven search loop. Use when a credible baseline and objective exist and the user wants systematic tuning without overfitting the eval.
----
-
 # Optimize against eval evidence
 
 Search for a change that survives held-out evaluation. A rising development score alone is not success.
 
 ## Admit the objective
 
-Start only when the target behavior, metric bundle, scorer validity, baseline, constraints, and held-out boundary are credible. Send gaps back to `eval-design` or `eval-validate-scorer`. Freeze the held-out set before search.
+Start only when the target behavior, metric bundle, scorer validity, baseline, constraints, and held-out boundary are credible. Send gaps back to `phases/design.md` or `phases/validate-scorer.md`. Freeze the held-out set before search.
 
 Choose the smallest editable component that could explain the failure: prompt, examples, tool schema, routing rule, retrieval setting, policy, or model configuration. Preserve safety gates, output contracts, latency and cost limits, and any user-specified architecture.
 
@@ -26,7 +21,7 @@ Track the lineage of every candidate. Cache evaluations by complete candidate an
 
 Use qualitative scorer feedback as a proposal signal, then trust measured outcomes. Inspect regressions and slice tradeoffs before accepting an aggregate gain. Prefer the simplest candidate within measurement uncertainty of the best result.
 
-For GEPA and platform-specific implementation hints, read [the platform notes](references/platforms.md) only for the selected platform.
+For GEPA and platform-specific implementation hints, read [the platform notes](../references/platforms/optimize.md) only for the selected platform.
 
 ## Completion
 

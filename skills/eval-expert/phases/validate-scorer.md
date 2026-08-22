@@ -1,8 +1,3 @@
----
-name: eval-validate-scorer
-description: Validate, calibrate, or repair an LLM judge or other learned eval scorer. Use when a scorer will guide optimization, compare models, gate a release, or appears biased, unstable, or easy to game.
----
-
 # Validate an eval scorer
 
 Treat the scorer as a measurement instrument. Its prompt can sound sensible while its decisions are useless.
@@ -23,7 +18,7 @@ For trajectory grading, attribute the failure to the earliest consequential deci
 
 Cache scorer results by the complete evaluation identity, including scorer version, rubric, judge model and settings, input, candidate output, reference material, and relevant trace. Re-evaluate only affected examples after a scorer change, then run the full calibration set before promotion.
 
-If implementation depends on a particular service or framework, read [the platform notes](references/platforms.md) only for the selected platform.
+If implementation depends on a particular service or framework, read [the platform notes](../references/platforms/validate-scorer.md) only for the selected platform.
 
 ## Promotion gate
 

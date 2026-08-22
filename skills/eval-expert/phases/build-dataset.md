@@ -1,8 +1,3 @@
----
-name: eval-build-dataset
-description: Build or revise versioned evaluation datasets for AI systems. Use when traces, incidents, requirements, or synthetic cases must become development, validation, held-out, adversarial, or regression sets with defensible provenance.
----
-
 # Build an eval dataset
 
 Make the dataset a durable, portable asset. A framework can be replaced; reviewed cases and their provenance cannot.
@@ -19,7 +14,7 @@ Deduplicate semantically across splits. Keep optimization examples out of the he
 
 Minimize sensitive records while preserving the failure mechanism. Follow the data owner's retention and consent rules. Get explicit approval before uploading private traces or datasets to a hosted service.
 
-If storage depends on a particular service or framework, read [the platform notes](references/platforms.md) only for the selected platform.
+If storage depends on a particular service or framework, read [the platform notes](../references/platforms/build-dataset.md) only for the selected platform.
 
 ## Completion
 

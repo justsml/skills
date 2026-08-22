@@ -1,4 +1,0 @@
-interface:
-  display_name: "Build Eval Dataset"
-  short_description: "Curate versioned, leakage-safe eval cases"
-  default_prompt: "Use $eval-build-dataset to turn this evidence into a reviewed, versioned evaluation dataset."

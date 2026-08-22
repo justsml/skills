@@ -47,28 +47,46 @@ If two routes remain plausible and choosing one would change the artifact, spend
 
 ## Detect the platform
 
-Before opening a phase's platform notes, work out which platform, if any, actually applies. Do not ask the user first; check the environment.
+Before opening platform notes, determine which platform applies and report three independent states for each candidate:
 
-1. **Env keys.** Check for platform-scoped variables: `BRAINTRUST_API_KEY` (Braintrust); `CONFIDENT_API_KEY` (DeepEval/Confident AI); `INSPECT_EVAL_MODEL` (Inspect AI); `LANGSMITH_API_KEY` or `LANGCHAIN_API_KEY` with `LANGCHAIN_TRACING_V2` (LangSmith); `LANGFUSE_SECRET_KEY`, `LANGFUSE_PUBLIC_KEY`, or `LANGFUSE_BASE_URL` (Langfuse); `PHOENIX_API_KEY` or `PHOENIX_COLLECTOR_ENDPOINT` (Phoenix).
-2. **CLIs present and linked.** Check `PATH` for `braintrust`, `deepeval`, `inspect`, `langfuse-cli`, `phoenix`, `promptfoo`, or `gepa`. A present CLI is a weaker signal than one that is also authenticated — a quick `<cli> whoami`, `<cli> --version` plus a config file, or an existing login/session file confirms it is actually linked rather than just installed.
-3. **Dependency manifests and config files.** Scan `package.json`, `pyproject.toml`, `requirements.txt`, or lockfiles for `braintrust`, `deepeval`, `inspect-ai`, `langsmith`, `langfuse`, `arize-phoenix`, `promptfoo`, or `gepa`. A `promptfooconfig.yaml`/`.yml` at the repo root is a strong Promptfoo signal on its own.
-4. **MCP servers configured.** Check `.mcp.json`, project or user Claude settings, and the current tool list for a connected MCP server matching one of these platforms (e.g. a `braintrust` or `langfuse` MCP server or tool prefix).
+| State | Evidence | Meaning |
+| --- | --- | --- |
+| Installed | repository dependency, config, executable, or connected tool | The platform can be used from this environment. |
+| Authenticated | local session evidence or an approved identity check | An account connection appears usable. |
+| Authorized for current data | explicit user approval or a repository policy that covers the named dataset, traces, prompts, outputs, and scores | The current material may be sent to that platform. |
 
-Treat these as corroborating signals, not a vote: a linked CLI or configured MCP server outweighs a stray env key left over from another project. When exactly one platform is well-supported by the evidence, use it and name the signal that justified it (e.g. "using Langfuse — `LANGFUSE_SECRET_KEY` is set and `langfuse` is a direct dependency"). When multiple platforms are equally well-supported, say so and ask which one applies rather than guessing.
+Check evidence in this order:
 
-When no platform is supported by any signal, that is a normal outcome, not a blocker: proceed with plain scripts, the repository's existing test runner, and the markdown decision record below, and say that no platform was detected rather than asking the user to name one. Only ask when the evidence is genuinely ambiguous between two or more platforms. Never fabricate a signal or silently default to a platform absent from the environment.
+1. Inspect repository-local dependencies, lockfiles, call sites, eval config, scripts, and project MCP config. This evidence takes precedence because it belongs to the current project.
+2. Check relevant executables and local project configuration without making network calls.
+3. Check platform credential variables for presence only. Never print, hash, partially reveal, or persist their values.
+4. Treat user-global config, login files, and unrelated MCP tools as weak evidence. They may be stale or belong to another project.
+
+Do not run `whoami`, account queries, or other networked identity checks unless the operating contract or the user's request authorizes that network action. A credential variable or saved login can support `authenticated: unknown or likely`; only local proof or an approved check can strengthen it.
+
+When one platform has clear repository-local support, select its local integration and report all three states. When several platforms have comparable repository-local support, ask which one owns the evaluation record. When only global credentials or tools exist, report them as stale or unconfirmed candidates and continue with repository scripts. When no platform is supported, proceed with plain scripts and say so.
+
+Detection never authorizes upload. Before sending traces, manifests, datasets, prompts, outputs, scores, or other project data, name the destination and data scope, confirm `authorized for current data: yes`, and obtain approval when the operating contract requires it. Keep private data local when authorization is absent or unclear.
 
 ## Work proactively
 
 Do not wait until completion to surface what you notice. As each phase produces evidence, call out interesting patterns immediately — a slice that dominates failures, a metric that moved for the wrong reason, a scorer that agrees suspiciously often with one candidate, a dataset skew, a cost outlier. Surface it as soon as it's visible, not batched into a final report.
 
-Before starting a phase, verify its prerequisites are actually met rather than assuming the happy path: a dataset exists and is reachable, credentials for the detected platform are valid, the held-out set is still frozen, the baseline result is recent enough to compare against. If a prerequisite is missing or stale, say so and propose the fix before burning a run on it.
+Before starting a phase, verify its prerequisites rather than assuming the happy path: a dataset exists and is reachable, the required platform state is established, the current data is authorized for the planned destination, the held-out set is still frozen, and the baseline is recent enough to compare against. If a prerequisite is missing or stale, say so and propose the fix before burning a run on it.
 
 After finishing a phase, suggest the likely next step from the sequence in **Route the work** rather than stopping silently — but stop short of starting it uninvited when it spends money, mutates shared state, or the user hasn't indicated they want the full pipeline run end to end.
 
 ## Maintain the decision record
 
-Prefer the user's existing artifact. Otherwise create `.scratch/evals/<short-name>/plan.md` with only the sections that carry current decisions:
+Classify artifacts before writing them:
+
+- **Temporary exploration:** disposable notes, probes, and dry-run output. Store them under `.scratch/evals/<short-name>/`. They do not support a release decision and may be deleted.
+- **Reviewed evaluation contract:** the current claims, gates, dataset and scorer identities, decisions, and open failures. Prefer the user's existing versioned artifact. Otherwise create `evals/<short-name>/plan.md` so the project can review and version it.
+- **Generated run artifacts:** raw outputs, traces, scorer details, and reports tied to a run identity. Store them in the repository's configured artifact location. If none exists, use `evals/<short-name>/runs/<run-id>/` for small, reviewable artifacts or a named local artifact directory for large or sensitive data. Record the path, digest, retention rule, and data classification in the reviewed contract.
+
+Do not leave a decision used for tuning, gating, or release only in `.scratch`. Promote the relevant contract and summarized evidence to the durable record first. Promotion requires a source-to-destination review, stable dataset and scorer identities, and removal or redaction of data that the repository must not version.
+
+Keep the reviewed contract limited to current decisions:
 
 ```markdown
 # <name>
@@ -98,7 +116,7 @@ Prefer the user's existing artifact. Otherwise create `.scratch/evals/<short-nam
 
 Keep tuning examples separate from the held-out set. This is a hard rule, not a preference: optimization must never read the held-out set's cases or labels, directly or through a scorer trained or tuned on them. If it did, the resulting result is invalid and must be discarded and rerun against a clean split, not just treated as weaker evidence. Record dataset, prompt, model, tool, and scorer versions for every result used in a decision. Treat critical safety, privacy, authorization, and irreversible-action failures as gates rather than averages.
 
-The `## Experiments` and `## Decisions` tables are a working log, not an archive. Once a table exceeds roughly 15-20 rows, move superseded or no-longer-actionable rows to `.scratch/evals/<short-name>/archive.md` and keep only the current baseline, the active candidates, and the most recent decisions inline. A decision record that nobody can scan in under a minute has stopped doing its job.
+The `## Experiments` and `## Decisions` tables are a working log, not an archive. Once a table exceeds roughly 15-20 rows, move superseded rows to `evals/<short-name>/archive.md` and keep only the current baseline, active candidates, and recent decisions inline. Keep generated bulk output in the run-artifact location rather than pasting it into the contract.
 
 ## Completion
 

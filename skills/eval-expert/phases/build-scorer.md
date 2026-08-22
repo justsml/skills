@@ -2,6 +2,14 @@
 
 Implement the cheapest scorer that measures the intended construct and exposes enough evidence to audit a wrong decision.
 
+## Phase contract
+
+- **Enter when:** reviewed cases and a metric exist, but no executable scorer measures that metric.
+- **Required inputs:** the metric contract, applicable cases, expected evidence, error policy, and cost or latency limits.
+- **Result:** a versioned scorer with an explicit input and output contract, fixtures, and audit evidence.
+- **Complete when:** the scorer runs on good, bad, boundary, and adversarial fixtures and its limits are documented.
+- **Next route:** send every learned scorer to `validate-scorer.md`; send construct gaps to `design.md`; send deterministic scorers with sufficient fixtures to `run-regressions.md`.
+
 ## Choose the mechanism
 
 Use code for schemas, exact state, calculations, citations, tool arguments, budgets, and policy rules. Use a model judge when semantic interpretation is necessary. Use human review for ground truth, costly ambiguity, or consequential calls that automation cannot yet support.

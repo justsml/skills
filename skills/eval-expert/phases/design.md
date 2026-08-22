@@ -2,6 +2,14 @@
 
 Build an evaluation contract that can distinguish a useful change from a merely higher score.
 
+## Phase contract
+
+- **Enter when:** the product claim, risk, metric, threshold, or release decision is undefined or disputed.
+- **Required inputs:** the AI behavior in scope, the decision the evidence must support, known failures, operating constraints, and available evidence.
+- **Result:** an evaluation contract mapping each claim and blocking risk to cases, scorers, slices, thresholds, and decision rules.
+- **Complete when:** every in-scope claim and gate has a measurable contract or a named evidence gap.
+- **Next route:** send case construction to `build-dataset.md`, scorer work to `build-scorer.md`, and unresolved product claims back to the user.
+
 ## Start from decisions
 
 Name the decision the eval will support, the behavior users were promised, and the failures that would block release. Inspect the system path and available evidence before choosing metrics.

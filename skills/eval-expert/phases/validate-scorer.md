@@ -2,6 +2,14 @@
 
 Treat the scorer as a measurement instrument. Its prompt can sound sensible while its decisions are useless.
 
+## Phase contract
+
+- **Enter when:** a learned or heuristic scorer may influence tuning, release, or safety decisions, or its judgments appear unstable or gameable.
+- **Required inputs:** the scorer version, rubric, representative calibration cases, qualified human labels, and an acceptable error tradeoff.
+- **Result:** a validation report with agreement, uncertainty, stability, bias, slice behavior, and promotion status.
+- **Complete when:** the evidence supports promotion or records why the scorer remains diagnostic only.
+- **Next route:** promote credible scorers to `run-regressions.md`; send rubric defects to `design.md`, case gaps to `build-dataset.md`, and implementation defects to `build-scorer.md`.
+
 Before building a calibration set, read [the cost guards](../cost-guards.md) for smoke-slice, retry, and abort rules.
 
 ## Define the construct

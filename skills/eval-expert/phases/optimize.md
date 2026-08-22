@@ -2,6 +2,14 @@
 
 Search for a change that survives held-out evaluation. A rising development score alone is not success.
 
+## Phase contract
+
+- **Enter when:** a credible metric, validated scorers, reproducible baseline, protected held-out set, bounded target, and approved budget already exist.
+- **Required inputs:** the editable component, development and validation cases, frozen held-out identity, baseline, constraints, scorer versions, and stop budget.
+- **Result:** an accepted or rejected candidate with exact configuration, lineage, slice results, held-out confirmation, cost, and constraint status.
+- **Complete when:** the selected candidate receives one untouched held-out check or the search stops for budget, plateau, variance, or constraint failure.
+- **Next route:** send metric defects to `design.md`, scorer defects to `validate-scorer.md`, missing cases to `build-dataset.md`, and accepted release evidence to the owning release process.
+
 ## Admit the objective
 
 Start only when the target behavior, metric bundle, scorer validity, baseline, constraints, and held-out boundary are credible. Send gaps back to `phases/design.md` or `phases/validate-scorer.md`. Freeze the held-out set before search. See [the decision record](../SKILL.md#maintain-the-decision-record) for the isolation rule and read [the cost guards](../cost-guards.md) before running the loop.

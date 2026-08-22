@@ -2,6 +2,14 @@
 
 Turn an evaluation contract into a reproducible experiment and a decision, not a pile of scores.
 
+## Phase contract
+
+- **Enter when:** the evaluation contract, cases, and required scorer validation can support a baseline or candidate comparison.
+- **Required inputs:** versioned cases and scorers, baseline and candidate identities, decision gates, run budget, and data authorization.
+- **Result:** a reproducible comparison with coverage, failures, slices, uncertainty, cost, and a decision.
+- **Complete when:** the run identity and artifacts are preserved and the result is accept, reject, investigate, or gather more evidence.
+- **Next route:** send metric defects to `design.md`, case gaps to `build-dataset.md`, scorer failures to `validate-scorer.md`, unknown production failures to `mine-traces.md`, and credible improvement targets to `optimize.md`.
+
 Before executing, read [the cost guards](../cost-guards.md) for smoke-slice, retry, and abort rules.
 
 ## Establish the run identity

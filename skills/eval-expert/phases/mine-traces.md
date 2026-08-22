@@ -2,6 +2,14 @@
 
 Use traces to find failure mechanisms, then convert reviewed examples into durable tests.
 
+## Phase contract
+
+- **Enter when:** failures are not yet understood and authorized production or experiment traces are the available evidence.
+- **Required inputs:** an authorized trace source, time window, population, system versions, privacy boundary, and the decision the analysis supports.
+- **Result:** named failure clusters, trace references, uncertainty, and reviewed regression candidates.
+- **Complete when:** each high-value cluster has supporting evidence and a next discriminating test or a documented evidence gap.
+- **Next route:** send metric blind spots to `design.md`, new cases to `build-dataset.md`, scorer mistakes to `validate-scorer.md`, and measured fix hypotheses to `optimize.md`.
+
 ## Select evidence
 
 Define the time window, population, system versions, and privacy boundary. Sample across success signals, explicit feedback, escalations, retries, tool errors, high cost or latency, policy events, and important user or risk slices. Preserve enough metadata to reproduce the behavior without retaining unnecessary sensitive content.

@@ -2,6 +2,14 @@
 
 Make the dataset a durable, portable asset. A framework can be replaced; reviewed cases and their provenance cannot.
 
+## Phase contract
+
+- **Enter when:** the evaluation contract names behaviors or failures but lacks reviewed cases that represent them.
+- **Required inputs:** the evaluation contract, source evidence, split policy, privacy rules, and case ownership.
+- **Result:** a versioned case set with provenance, labels, slices, sensitivity, and protected splits.
+- **Complete when:** required slices and failure modes have reviewed cases, split leakage checks pass, and unresolved labels are recorded.
+- **Next route:** send unmeasurable cases to `design.md`, cases without scorers to `build-scorer.md`, and executable cases to `run-regressions.md`.
+
 ## Define the case contract
 
 Give every case a stable ID, input and context, expected evidence or acceptable behavior, failure-mode and slice tags, provenance, split, sensitivity, and label status. Represent multiple valid outcomes when the task permits them. For agents, record end-state invariants and only those trajectory constraints that the product actually requires.

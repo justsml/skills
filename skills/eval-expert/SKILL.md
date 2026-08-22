@@ -1,11 +1,23 @@
 ---
 name: eval-expert
-description: Coordinate an end-to-end evaluation program for an AI feature or agent. Use when the work spans metric design, dataset curation, scorer implementation and validation, regression execution, trace analysis, and iterative optimization, or when the user wants one maintained eval plan across those activities.
+description: Coordinate a measured evaluation program for an AI feature or agent. Use when the user asks for evaluation design, datasets, scorers, scorer validation, regressions, trace-based failure analysis, optimization backed by measurement, or one maintained eval plan across those activities. Do not use for one-off prompt rewrites, ordinary unit tests, or small AI changes unless the user asks for metrics, comparison, or regression coverage.
 ---
 
 # Eval expert
 
 Keep one decision record for the evaluation program and work each phase from its own file below.
+
+## Operating contract
+
+Enter only when the request needs measured evidence about AI behavior. Identify the release, tuning, or diagnosis decision before doing phase work. If the user asks for a small implementation or prompt edit without measurement or regression coverage, handle it directly without this skill.
+
+Authorized work includes inspecting local evidence, maintaining the evaluation record, curating cases, implementing eval-only scorers and runners, running approved local evaluations, and analyzing their results. Limit changes to evaluation artifacts and the explicitly requested AI component. Treat production code, deployment, provider settings, shared datasets, and release controls as outside the contract unless the user authorizes that change.
+
+Ask before a paid run, hosted upload, networked action that sends project data, destructive dataset rewrite, production mutation, or release-state change. Credential or platform detection establishes availability, not permission.
+
+Every phase must leave the decision record with its result, evidence, uncertainty, and next route. Stop when the requested phase meets its completion condition, a required input is missing, approval is required, evidence cannot support the decision, or the next phase would expand the user's request.
+
+Non-goals include general AI implementation, one-off prompt polishing, ordinary test writing, provider migration, and production incident response without an evaluation question.
 
 ## Route the work
 
@@ -30,6 +42,8 @@ For a mid-flight request, match the symptom to the phase that owns it rather tha
 - "The metric and held-out evaluation are trusted, and we want the score to move" → `phases/optimize.md`.
 
 When a symptom could plausibly map to more than one phase, pick the earliest one in the sequence above — fixing the metric or scorer before searching against it is cheaper than discovering the search was pointed at a broken instrument.
+
+If two routes remain plausible and choosing one would change the artifact, spend, permissions, or evidence needed, ask one focused question naming that difference. Otherwise take the earlier route and record the assumption.
 
 ## Detect the platform
 

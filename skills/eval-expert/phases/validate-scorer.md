@@ -2,7 +2,7 @@
 
 Treat the scorer as a measurement instrument. Its prompt can sound sensible while its decisions are useless.
 
-Before building a calibration set, see `SKILL.md` § Protect the budget and the run for the smoke-slice, retry, and abort guardrails this phase runs under.
+Before building a calibration set, read [the cost guards](../cost-guards.md) for smoke-slice, retry, and abort rules.
 
 ## Define the construct
 

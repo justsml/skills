@@ -52,18 +52,6 @@ Before starting a phase, verify its prerequisites are actually met rather than a
 
 After finishing a phase, suggest the likely next step from the sequence in **Route the work** rather than stopping silently — but stop short of starting it uninvited when it spends money, mutates shared state, or the user hasn't indicated they want the full pipeline run end to end.
 
-## Protect the budget and the run
-
-Read this section before starting `phases/run-regressions.md`, `phases/validate-scorer.md`, or `phases/optimize.md` — each spends money or burns a budget on every run, and none of them repeat these guardrails in their own file.
-
-Evaluation loops can burn money and time fast, especially model judges and optimization search. Default to caution:
-
-- **Bound before you run.** Before a regression suite, calibration set, or optimization loop executes, know its expected case count, model calls, and rough cost. Run a small smoke slice first (a handful of cases) and confirm it behaves before scaling to the full set.
-- **Log usage and provenance as you go, not after.** Record token counts, call counts, model and platform used, and cost per run alongside the run identity (dataset revision, candidate config, scorer version) in the decision record or an adjacent log — this is evidence, not a deliverable to write up at the end.
-- **Know retryable from fatal.** Retry transient infrastructure failures: rate limits, timeouts, 5xx responses, connection resets, a dependency (GitHub, a hosted platform, a model provider) being temporarily down. Do not retry fatal errors: auth failures, malformed requests, schema violations, quota exhaustion, or a scorer/candidate producing consistently wrong output — retrying those just repeats the failure at cost. When unsure which class an error falls into, treat one retry as a diagnostic, not a habit.
-- **Back off deliberately.** Use exponential backoff with jitter and a hard cap on attempts for retryable errors. Never spin in a tight retry loop. If a dependency is down for the run's duration, stop that path, record what was blocked and why, and either skip it, substitute an unaffected part of the workplan, or resume later — don't let one blocked call stall or silently zero out the whole run.
-- **Stop on runaway signals.** Abort a loop that shows unbounded cost growth, a flat or worsening trend past its planned budget, repeated identical failures, or a candidate gaming the scorer. Report what was spent and why it stopped rather than continuing on the theory that one more iteration will fix it.
-
 ## Maintain the decision record
 
 Prefer the user's existing artifact. Otherwise create `.scratch/evals/<short-name>/plan.md` with only the sections that carry current decisions:

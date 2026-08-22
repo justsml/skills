@@ -2,7 +2,7 @@
 
 Turn an evaluation contract into a reproducible experiment and a decision, not a pile of scores.
 
-Before executing, see `SKILL.md` § Protect the budget and the run for the smoke-slice, retry, and abort guardrails this phase runs under.
+Before executing, read [the cost guards](../cost-guards.md) for smoke-slice, retry, and abort rules.
 
 ## Establish the run identity
 

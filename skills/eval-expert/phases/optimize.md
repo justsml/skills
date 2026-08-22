@@ -4,7 +4,7 @@ Search for a change that survives held-out evaluation. A rising development scor
 
 ## Admit the objective
 
-Start only when the target behavior, metric bundle, scorer validity, baseline, constraints, and held-out boundary are credible. Send gaps back to `phases/design.md` or `phases/validate-scorer.md`. Freeze the held-out set before search — see `SKILL.md` § Maintain the decision record and § Protect the budget and the run for the hard rule against exposing it during search and the cost guardrails for this loop.
+Start only when the target behavior, metric bundle, scorer validity, baseline, constraints, and held-out boundary are credible. Send gaps back to `phases/design.md` or `phases/validate-scorer.md`. Freeze the held-out set before search. See [the decision record](../SKILL.md#maintain-the-decision-record) for the isolation rule and read [the cost guards](../cost-guards.md) before running the loop.
 
 Choose the smallest editable component that could explain the failure: prompt, examples, tool schema, routing rule, retrieval setting, policy, or model configuration. Preserve safety gates, output contracts, latency and cost limits, and any user-specified architecture.
 

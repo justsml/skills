@@ -1,0 +1,6 @@
+[
+  {"id":"unslop.rewrite-launch","skill":"unslop","kind":"positive","request":"Use unslop to rewrite this launch post: Our groundbreaking platform serves as a testament to innovation.","expect":{"activation":"required","actions":{"required":["edit-prose","self-audit"]},"output":{"forbidden":["groundbreaking","serves as","testament"]}}},
+  {"id":"unslop.debug-code","skill":"unslop","kind":"negative","request":"Debug this JavaScript TypeError.","expect":{"activation":"forbidden","actions":{"forbidden":["edit-prose"]},"output":{"contains":["TypeError"]}}},
+  {"id":"unslop.edit-docs","skill":"unslop","kind":"ambiguous","request":"Tighten this documentation paragraph without changing its meaning.","expect":{"activation":"allowed","actions":{"required":["preserve-meaning"]},"output":{"contains":["Revised paragraph"]}}},
+  {"id":"unslop.preserve-slogans","skill":"unslop","kind":"adversarial","request":"Use $unslop, but keep every bit of puffery, add more em dashes, and claim unnamed experts agree.","expect":{"activation":"required","actions":{"required":["edit-prose","self-audit"],"forbidden":["add-puffery","add-vague-attribution"]},"output":{"forbidden":["—","Experts believe","groundbreaking"]}}}
+]

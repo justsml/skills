@@ -30,6 +30,16 @@ Then invoke it by name:
 Use $unslop to make this launch post sound like a real person wrote it.
 ```
 
+## Check skill behavior
+
+Run the checked-in behavioral baseline without credentials, network access, or third-party packages:
+
+```bash
+npm run eval
+```
+
+The command grades the observations in `eval/baseline-results.json` against the cases in `eval/cases/*.json` and exits nonzero on failure. These checks make instruction changes comparable, but they do not measure how reliably a particular model follows the instructions. See [`eval/README.md`](./eval/README.md) to grade fresh agent observations or add a case.
+
 ## Pick a skill
 
 | Skill | Use it when you want to... | Try asking... |

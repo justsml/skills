@@ -5,8 +5,8 @@
   "description": "Agent skills for planning and operating AI work",
   "license": "MIT",
   "scripts": {
+    "eval": "node eval/run.mjs",
     "list": "./scripts/list-skills.sh",
     "link": "./scripts/link-skills.sh"
   }
 }
-

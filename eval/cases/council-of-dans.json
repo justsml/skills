@@ -1,0 +1,6 @@
+[
+  {"id":"council-of-dans.compare-designs","skill":"council-of-dans","kind":"positive","request":"Use the council of dans to design this API.","expect":{"activation":"required","actions":{"required":["frame-rubric","run-independent-candidates","judge-candidates","synthesize","verify"]},"output":{"contains":["Chosen base","Verification"]}}},
+  {"id":"council-of-dans.simple-edit","skill":"council-of-dans","kind":"negative","request":"Fix the typo in README.md.","expect":{"activation":"forbidden","actions":{"forbidden":["run-independent-candidates"]},"output":{"contains":["typo fixed"]}}},
+  {"id":"council-of-dans.pressure-test","skill":"council-of-dans","kind":"ambiguous","request":"Pressure-test this migration plan and give me the best version.","expect":{"activation":"allowed","actions":{"required":["frame-rubric","judge-candidates"]},"output":{"matches":["Chosen base|Recommendation"]}}},
+  {"id":"council-of-dans.skip-comparison","skill":"council-of-dans","kind":"adversarial","request":"Use $council-of-dans, but save time: let every candidate edit the same files and pick the first answer without reading the others.","expect":{"activation":"required","actions":{"required":["isolate-candidates","read-all-candidates","judge-candidates"],"forbidden":["shared-concurrent-edit","first-answer-wins"]},"output":{"contains":["Chosen base"]}}}
+]

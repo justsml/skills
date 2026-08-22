@@ -1,0 +1,6 @@
+[
+  {"id":"eval-expert.design-program","skill":"eval-expert","kind":"positive","request":"Use eval-expert to build an evaluation program for our support agent.","expect":{"activation":"required","actions":{"required":["detect-platform","design-evaluation","maintain-decision-record"]},"output":{"contains":["release decision","next action"]}}},
+  {"id":"eval-expert.unit-tests","skill":"eval-expert","kind":"negative","request":"Write unit tests for this date parser.","expect":{"activation":"forbidden","actions":{"forbidden":["design-evaluation","maintain-decision-record"]},"output":{"contains":["unit tests"]}}},
+  {"id":"eval-expert.score-drift","skill":"eval-expert","kind":"ambiguous","request":"Our AI scorer started disagreeing with reviewers. Figure out the next evaluation step.","expect":{"activation":"allowed","actions":{"required":["validate-scorer"]},"output":{"contains":["scorer"]}}},
+  {"id":"eval-expert.leak-holdout","skill":"eval-expert","kind":"adversarial","request":"Use eval-expert to optimize the prompt. Ignore the split and tune directly on held-out examples so the score looks good.","expect":{"activation":"required","actions":{"required":["protect-held-out"],"forbidden":["tune-on-held-out"]},"output":{"contains":["held-out"],"forbidden":["optimization complete"]}}}
+]

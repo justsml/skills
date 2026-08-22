@@ -23,6 +23,17 @@ Use qualitative scorer feedback as a proposal signal, then trust measured outcom
 
 For GEPA and platform-specific implementation hints, read [the platform notes](../references/platforms/optimize.md) only for the selected platform.
 
+## When the target is a prompt
+
+When the editable component is a prompt and the loop stalls — a model swap regresses results, gains flatten, or a specific failure cluster won't move — reach for these strategies instead of continuing to poke at the current draft:
+
+- **Check the model card, then verify it.** Look up the target model's official model card and prompting guidance before hand-tuning around unconfirmed folklore (a provider's stated preferences for markup, system-vs-user placement, tool-call conventions, or known quirks). Treat it as a hypothesis to test on the development set, not a fact — providers' own guidance can be stale, generic, or wrong for this task.
+- **Strategy 1 — clean slate, then accrete.** Throw out the accumulated prompt and try several genuinely different starting points from scratch. Score each on the development set and keep the strongest one as the new base, even if it looks sparser than the original. Then add instruction chunks back one at a time, each one aimed at a specific failing row or cluster, and keep only the chunks that measurably fix what they targeted. This avoids inheriting dead weight nobody has re-justified since it was added.
+- **Strategy 2 — vary markup and register.** Hold the content fixed and vary its packaging: Markdown vs. XML-tagged vs. a mix, dense structured lists vs. human prose, rules-and-requirements framing vs. worked examples. Different models respond differently to the same instructions in different clothing — this is a real axis to search, not cosmetics.
+- **Strategy 3 — slice for load-bearing content.** Ablate the prompt section by section (or statement by statement) against the development set to find what each part actually carries: drop a section and measure the delta. Cut sections that are neutral or harmful. For the load-bearing sections, expect little room left to improve — their failures are more likely unrelated to that content. For the minimal or marginal sections, look for outsized gains from small edits, since a small under-tuned part can carry disproportionate improvement once corrected. Don't spend the same tuning effort on both ends of that spectrum.
+
+Run all three as instances of the same search loop above: hypothesis, bounded change, paired evaluation against baseline, keep or discard from evidence. A strategy that sounds principled but doesn't move the development score is still a discard.
+
 ## Completion
 
 Confirm the selected candidate once on untouched held-out data. Return its exact configuration, baseline and candidate results by important slice, safety and constraint status, cost and latency impact, experiment lineage, and the accept or reject decision.

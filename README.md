@@ -4,7 +4,27 @@ Agent skills for planning and operating AI work.
 
 Each skill is a directory directly under `skills/` with its own `SKILL.md`, and optional `agents/openai.yaml` files provide UI metadata and invocation policy.
 
-## Quickstart
+## Install
+
+Run the interactive installer and choose which skills and agents to set up:
+
+```bash
+npx skills@latest add justsml/skills
+```
+
+To inspect the available skills first:
+
+```bash
+npx skills@latest add justsml/skills --list
+```
+
+To install one skill directly, pass its name:
+
+```bash
+npx skills@latest add justsml/skills --skill eval-expert
+```
+
+## Local development
 
 List available skills:
 

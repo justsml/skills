@@ -20,6 +20,18 @@ node eval/run.mjs --results /path/to/results.json
 
 The checked-in observations provide a visible, deterministic baseline. They do not prove that every model follows the skills reliably. A runtime adapter or trace reviewer can consume each case's `request`, record whether the agent loaded the skill, list its action tags, capture its output, and pass those observations to the runner.
 
+## Council persona examples
+
+`datasets/council-of-dans-personas.json` contains one-shot prompts, example candidate outputs, and rationale labels covering every built-in council persona. The examples span code generation, architecture, and security analysis so adherence is not conflated with one task shape.
+
+`scorers/council-of-dans-persona.mjs` builds a reference-free LLM-judge prompt with asymmetric evidence requirements for each persona. It separately scores task completion and persona adherence; an incomplete artifact receives zero even if its voice resembles the persona. Keep judge temperature at zero, retain the raw JSON and judge model/version, and calibrate the scorer against blinded human labels before using it as a release gate.
+
+Run its deterministic contract tests with:
+
+```bash
+node --test eval/scorers/council-of-dans-persona.test.mjs
+```
+
 ## Add a case
 
 Add an object to any JSON file in `cases/`. The runner discovers it automatically. Each case has this shape:

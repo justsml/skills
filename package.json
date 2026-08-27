@@ -1,12 +1,24 @@
 {
   "name": "ai-skillz",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Agent skills for planning and operating AI work",
   "license": "MIT",
+  "author": {
+    "name": "Dan Levy",
+    "email": "dan@danlevy.net",
+    "url": "https://danlevy.net/"
+  },
   "scripts": {
     "eval": "node eval/run.mjs",
     "list": "./scripts/list-skills.sh",
     "link": "./scripts/link-skills.sh"
-  }
+  },
+  "repository": {
+    "url": "git@github.com:justsml/skills.git",
+    "type": "git"
+  },
+  "homepage": "https://github.com/justsml/skills",
+  "type": "module"
+
 }

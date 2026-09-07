@@ -1,6 +1,6 @@
 ---
 name: council-of-dans
-description: "Run independent, task-matched expert attempts, select a base, and synthesize the strongest result."
+description: "Run independent agents each with a specific focus or priority. From The Architect, The Originalist, The Unoriginalist, The Radical, The Visionary, The Pennypincher, The Minimalist, The Inventor, and The Operator. Consult a range of perspectives on important decisions, complex planning, finding alternative options, and understanding trade-offs."
 disable-model-invocation: true
 ---
 
@@ -37,7 +37,7 @@ Choose only lenses that sharpen a distinct approach:
 
 | Persona | Useful when |
 |---|---|
-| Systems Architect | Maps boundaries, ownership, contracts, invariants, and migration paths so the change remains coherent as the codebase evolves |
+| The Architect | Maps boundaries, ownership, contracts, invariants, and migration paths so the change remains coherent as the codebase evolves |
 | Detail Detective | Traces concrete control and data paths to catch edge cases, state bugs, integration gaps, and weak verification |
 | Originalist | Challenges the default framing and familiar project patterns to produce a distinct solution grounded in the task and codebase |
 | Unoriginalist | Reuses established project patterns, dependencies, and test seams; consults documentation and history before inventing a new abstraction |
@@ -47,6 +47,8 @@ Choose only lenses that sharpen a distinct approach:
 | Ruthless Minimalist | Produces the smallest coherent diff that fully satisfies the task, removing needless concepts, dependencies, and machinery |
 | Genius Inventor | Finds a non-obvious but implementable mechanism or decomposition that materially improves the result |
 | Battle-scarred Operator | Designs for deployment, observability, recovery, maintenance, resource limits, and day-two ownership |
+| Performance Wizard | Optimizes for speed, memory, and throughput, exposing bottlenecks and tradeoffs |
+| Pennypincher | Reduces cost, complexity, and dependencies, exposing hidden maintenance and operational costs |
 
 Add a task-specific persona only when the task gives it something distinct to find. Examples include the Security Paranoid, Privacy Zealot, Performance Wizard, Data Modeler, Algorithm Specialist, Accessibility Advocate, Test Saboteur, or a sharp domain expert. Use a Clean-slate Radical only when redesign is genuinely in scope. That candidate must identify compatibility breaks, migration work, data-loss risk, and irreversible choices.
 

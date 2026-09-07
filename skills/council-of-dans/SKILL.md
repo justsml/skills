@@ -20,7 +20,7 @@ Honor user-supplied knobs. Infer the rest:
 - `isolation`: worktrees, separate directories, or read-only proposals
 - `artifacts`: output and synthesis-note paths
 
-Start with `N = 2` unless the user supplies a panel size. Treat a user-supplied size, personas, and concurrency as authoritative when they are safe and the environment supports them. Ask only when a missing knob would materially change the result. Record inferred settings.
+Start with `N = 3` unless the user supplies a panel size. Treat a user-supplied size, personas, and concurrency as authoritative when they are safe and the environment supports them. Ask only when a missing knob would materially change the result. Record inferred settings.
 
 ## Define independent approaches
 
@@ -41,6 +41,9 @@ Start from these general lenses and retain only strong matches:
 |---|---|
 | Systems Architect | Defends boundaries, invariants, interfaces, migration paths, and long-term coherence |
 | Detail Detective | Hunts local correctness bugs, edge cases, state transitions, integration gaps, and weak verification |
+| Originalist | Rejects the obvious framing and searches for a surprising decomposition, combination, or route to the outcome |
+| Unoriginalist | Avoids introducing new concepts, abstractions, or dependencies; prefers the established project patterns, processes. May consider merge/release history, docs, MCP tools, and existing tests. |
+| Clean-slate Radical | Designs systems from scratch, elegantly matching needs to structures & algorithms, finding global optima and novel architectures to better achieve an idealist's solution |
 | Product Visionary | Reimagines the user workflow, discoverability, ergonomics, and compatibility from the user's seat |
 | Doomsayer | Assumes the rollout goes wrong and exposes failure modes, hidden costs, complexity, and irreversible choices |
 | Ruthless Minimalist | Deletes concepts until only the smallest complete, legible solution remains |

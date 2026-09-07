@@ -45,7 +45,7 @@ The command grades the observations in `eval/baseline-results.json` against the 
 | Skill | Use it when you want to... | Try asking... |
 | --- | --- | --- |
 | [`unslop`](./skills/unslop/SKILL.md) | Remove stiff, generic AI writing without losing the original meaning | `Use $unslop to rewrite this README intro.` |
-| [`council-of-dans`](./skills/council-of-dans/SKILL.md) | Get several independent approaches and combine the strongest parts | `Use $council-of-dans to pressure-test this API design.` |
+| [`council-of-dans`](./skills/council-of-dans/SKILL.md) | Run the same task in parallel under different priorities and see every result | `Use $council-of-dans to pressure-test this API design.` |
 | [`eval-expert`](./skills/eval-expert/SKILL.md) | Build and run a complete evaluation program for an AI feature | `Use $eval-expert to design evals for our support bot.` |
 | [`eval-doctor`](./skills/eval-doctor/SKILL.md) | Audit an eval stack against current provider and platform guidance | `Use $eval-doctor to find the highest-value upgrades in our eval stack.` |
 

@@ -12,7 +12,7 @@ Run independent solution families against the same task, judge them with a task-
 
 Honor user-supplied knobs. Infer the rest:
 
-- `N`: number of candidates
+- `N`: number of parallel candidates
 - `personas`: required, excluded, or user-defined lenses
 - `concurrency`: maximum simultaneous subagents
 - `reasoning`: effort by phase or persona
@@ -33,26 +33,24 @@ Each candidate owns the complete task and tests a different solution hypothesis.
 
 Persona wording alone does not make candidates independent. Use a persona only as a lens within a named solution family. For each candidate, record one sentence explaining what decision it could change. If two briefs would likely produce the same design, combine them or drop one.
 
-Use these lenses only when they sharpen a distinct approach:
-
-Start from these general lenses and retain only strong matches:
+Choose only lenses that sharpen a distinct approach:
 
 | Persona | Useful when |
 |---|---|
-| Systems Architect | Defends boundaries, invariants, interfaces, migration paths, and long-term coherence |
-| Detail Detective | Hunts local correctness bugs, edge cases, state transitions, integration gaps, and weak verification |
-| Originalist | Rejects the obvious framing and searches for a surprising decomposition, combination, or route to the outcome |
-| Unoriginalist | Avoids introducing new concepts, abstractions, or dependencies; prefers the established project patterns, processes. May consider merge/release history, docs, MCP tools, and existing tests. |
-| Clean-slate Radical | Designs systems from scratch, elegantly matching needs to structures & algorithms, finding global optima and novel architectures to better achieve an idealist's solution |
-| Product Visionary | Reimagines the user workflow, discoverability, ergonomics, and compatibility from the user's seat |
-| Doomsayer | Assumes the rollout goes wrong and exposes failure modes, hidden costs, complexity, and irreversible choices |
-| Ruthless Minimalist | Deletes concepts until only the smallest complete, legible solution remains |
-| Genius Inventor | Rejects the obvious framing and searches for a surprising decomposition, combination, or route to the outcome |
-| Battle-scarred Operator | Distrusts designs that ignore deployment, observability, recovery, maintenance, resource limits, or day-two use |
+| Systems Architect | Maps boundaries, ownership, contracts, invariants, and migration paths so the change remains coherent as the codebase evolves |
+| Detail Detective | Traces concrete control and data paths to catch edge cases, state bugs, integration gaps, and weak verification |
+| Originalist | Challenges the default framing and familiar project patterns to produce a distinct solution grounded in the task and codebase |
+| Unoriginalist | Reuses established project patterns, dependencies, and test seams; consults documentation and history before inventing a new abstraction |
+| Clean-slate Radical | Rethinks the system from first principles, choosing boundaries, data structures, and algorithms for the best end state rather than the smallest migration |
+| Product Visionary | Starts from the user's workflow and reshapes behavior, discoverability, ergonomics, and compatibility around it |
+| Doomsayer | Tries to break the change before users do, exposing failure modes, hidden costs, unsafe rollouts, and irreversible choices |
+| Ruthless Minimalist | Produces the smallest coherent diff that fully satisfies the task, removing needless concepts, dependencies, and machinery |
+| Genius Inventor | Finds a non-obvious but implementable mechanism or decomposition that materially improves the result |
+| Battle-scarred Operator | Designs for deployment, observability, recovery, maintenance, resource limits, and day-two ownership |
 
-Add task-specific characters only when the task gives them something distinct to find. Examples include the Security Paranoid, Privacy Zealot, Performance Wizard, Data Modeler, Algorithm Specialist, Accessibility Advocate, Test Saboteur, or a sharp domain expert. Use a Clean-slate Radical only when redesign is genuinely in scope. That candidate must label compatibility breaks, migration work, data-loss risk, and irreversible choices.
+Add a task-specific persona only when the task gives it something distinct to find. Examples include the Security Paranoid, Privacy Zealot, Performance Wizard, Data Modeler, Algorithm Specialist, Accessibility Advocate, Test Saboteur, or a sharp domain expert. Use a Clean-slate Radical only when redesign is genuinely in scope. That candidate must identify compatibility breaks, migration work, data-loss risk, and irreversible choices.
 
-The name should activate a worldview. The mandate keeps it useful. Tell candidates to stay in character while still delivering the whole artifact.
+The name supplies the worldview; the mandate ties it to observable work. For coding tasks, treat the persona as an execution bias: each candidate still inspects the repository, implements the complete change in isolation, and runs the relevant checks.
 
 Use one capable model across candidates unless the user or environment specifies otherwise. For coding candidates, prefer low reasoning effort; raise it only when measured complexity warrants it. For planning, architecture, and judging, prefer medium or high reasoning effort.
 

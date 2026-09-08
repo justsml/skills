@@ -1,24 +1,38 @@
 # Behavioral evaluations
 
-The evaluation suite separates test intent from observed agent behavior:
+Two runners, and they measure different things.
+
+## `npm run eval` — offline contract check
 
 - `cases/*.json` describes requests and gradeable expectations.
-- `baseline-results.json` records the current offline baseline.
+- `baseline-results.json` records hand-written observations of the behavior each case wants.
 - `run.mjs` validates the files and grades every observation.
-
-Run the repository baseline with:
 
 ```bash
 npm run eval
 ```
 
-To grade a fresh agent run, write one observation per case to another JSON file and pass it to the same runner:
+**This is a fixture check, not a model test.** The checked-in observations were written to satisfy the cases, so this suite passes by construction. Its job is to keep the cases and the skills describing the same contract: when you change what a skill does, this run tells you which expectations and fixtures went stale. It proves nothing about how a model behaves.
+
+To grade a real agent run, write one observation per case to another JSON file and pass it to the same runner:
 
 ```bash
 node eval/run.mjs --results /path/to/results.json
 ```
 
-The checked-in observations provide a visible, deterministic baseline. They do not prove that every model follows the skills reliably. A runtime adapter or trace reviewer can consume each case's `request`, record whether the agent loaded the skill, list its action tags, capture its output, and pass those observations to the runner.
+A runtime adapter or trace reviewer can consume each case's `request`, record whether the agent loaded the skill, list its action tags, capture its output, and pass those observations in.
+
+## `npm run eval:live` — routing check against a real model
+
+```bash
+npm run eval:live               # every case
+node eval/live.mjs --limit 6    # first 6 cases
+node eval/live.mjs --case unslop.debug-code
+```
+
+Sends each case request to Claude Haiku 4.5 with nothing but the skill names and descriptions, and asks which skill it would load. Grades the answer against `expect.activation`: `required` must select that skill, `forbidden` must not, `allowed` is reported without a verdict. Skills marked `disable-model-invocation` are labeled as manual-only in the catalog, so this also checks that they stay quiet on requests that do not name them.
+
+This tests descriptions, which is what actually decides whether a skill ever loads. It is deliberately the cheapest real test available — one short reply per case, capped at 16 output tokens. The full suite is well under a cent, and the run prints its token usage and estimated cost. Needs `ANTHROPIC_API_KEY` or an `ant auth login` profile.
 
 ## Council persona examples
 

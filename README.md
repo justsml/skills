@@ -32,23 +32,30 @@ Use $unslop to make this launch post sound like a real person wrote it.
 
 ## Check skill behavior
 
-Run the checked-in behavioral baseline without credentials, network access, or third-party packages:
+Check the skills against their cases offline, without credentials or network access:
 
 ```bash
 npm run eval
 ```
 
-The command grades the observations in `eval/baseline-results.json` against the cases in `eval/cases/*.json` and exits nonzero on failure. These checks make instruction changes comparable, but they do not measure how reliably a particular model follows the instructions. See [`eval/README.md`](./eval/README.md) to grade fresh agent observations or add a case.
+This grades the hand-written observations in `eval/baseline-results.json` against the cases in `eval/cases/*.json`. It is a fixture check: it catches cases and skills that have drifted apart, and proves nothing about model behavior.
+
+For that, run the routing eval against a real model:
+
+```bash
+npm run eval:live
+```
+
+It sends each case request to Claude Haiku 4.5 with nothing but the skill descriptions and grades which skill gets picked — the cheapest test that measures something real, well under a cent for the full suite. Needs `ANTHROPIC_API_KEY`. See [`eval/README.md`](./eval/README.md) for both runners and how to add a case.
 
 ## Pick a skill
 
 | Skill | Use it when you want to... | Try asking... |
 | --- | --- | --- |
 | [`unslop`](./skills/unslop/SKILL.md) | Remove stiff, generic AI writing without losing the original meaning | `Use $unslop to rewrite this README intro.` |
-| [`council-of-dans`](./skills/council-of-dans/SKILL.md) | Run the same task in parallel under different priorities and see every result | `Use $council-of-dans to pressure-test this API design.` |
+| [`council-of-dans`](./skills/council-of-dans/SKILL.md) | Run the same task in parallel under different priorities and see every result (name it explicitly — it never self-invokes) | `Use $council-of-dans to pressure-test this API design.` |
 | [`eval-expert`](./skills/eval-expert/SKILL.md) | Build and run a complete evaluation program for an AI feature | `Use $eval-expert to design evals for our support bot.` |
 | [`eval-doctor`](./skills/eval-doctor/SKILL.md) | Audit an eval stack against current provider and platform guidance | `Use $eval-doctor to find the highest-value upgrades in our eval stack.` |
-
 
 ## Thanks
 

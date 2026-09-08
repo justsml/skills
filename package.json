@@ -1,7 +1,7 @@
 {
   "name": "ai-skillz",
-  "version": "0.2.0",
-  "private": true,
+  "version": "1.0.2",
+  "private": false,
   "description": "Agent skills for planning and operating AI work",
   "license": "MIT",
   "author": {

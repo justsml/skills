@@ -7,31 +7,19 @@ description: Coordinate a measured evaluation program for an AI feature or agent
 
 Keep one decision record for the evaluation program and work each phase from its own file below.
 
+**Held-out data is never touched by tuning.** Optimization must not read the held-out set's cases or labels, directly or through a scorer trained or tuned on them. A result produced in violation of this is invalid: discard it and rerun against a clean split. It is not weaker evidence.
+
 ## Operating contract
 
-Enter only when the request needs measured evidence about AI behavior. Identify the release, tuning, or diagnosis decision before doing phase work. If the user asks for a small implementation or prompt edit without measurement or regression coverage, handle it directly without this skill.
+- **Enter** only when the request needs measured evidence about AI behavior, and name the release, tuning, or diagnosis decision first. A small implementation or prompt edit with no measurement or regression coverage does not need this skill.
+- **Change** only evaluation artifacts and the AI component the user named. Production code, deployment, provider settings, shared datasets, and release controls are out of scope unless the user authorizes the change.
+- **Ask first** before a paid run, hosted upload, any networked action that sends project data, a destructive dataset rewrite, a production mutation, or a release-state change. Detecting a credential or platform establishes availability, not permission.
 
-Authorized work includes inspecting local evidence, maintaining the evaluation record, curating cases, implementing eval-only scorers and runners, running approved local evaluations, and analyzing their results. Limit changes to evaluation artifacts and the explicitly requested AI component. Treat production code, deployment, provider settings, shared datasets, and release controls as outside the contract unless the user authorizes that change.
-
-Ask before a paid run, hosted upload, networked action that sends project data, destructive dataset rewrite, production mutation, or release-state change. Credential or platform detection establishes availability, not permission.
-
-Every phase must leave the decision record with its result, evidence, uncertainty, and next route. Stop when the requested phase meets its completion condition, a required input is missing, approval is required, evidence cannot support the decision, or the next phase would expand the user's request.
-
-Non-goals include general AI implementation, one-off prompt polishing, ordinary test writing, provider migration, and production incident response without an evaluation question.
+Every phase leaves the decision record with its result, evidence, uncertainty, and next route. Stop when the phase meets its completion condition, a required input is missing, approval is needed, evidence cannot support the decision, or the next phase would expand the request.
 
 ## Route the work
 
-- Read `phases/design.md` to turn product claims and risks into datasets, metrics, slices, and decision gates.
-- Read `phases/build-dataset.md` to curate versioned development, validation, held-out, and regression cases.
-- Read `phases/build-scorer.md` to implement one evidence-producing scorer per metric.
-- Read `phases/validate-scorer.md` before a learned scorer can influence tuning, release, or safety decisions.
-- Read `phases/run-regressions.md` to make the design executable and compare candidates reproducibly.
-- Read `phases/mine-traces.md` when production or experiment traces are the evidence source.
-- Read `phases/optimize.md` only after the objective and held-out evaluation are credible.
-
-Do the requested phase directly. For multi-phase work, sequence it as failure discovery, design, dataset construction, scorer implementation, scorer validation, baseline execution, optimization, then held-out confirmation. Re-enter design whenever evidence shows that the metric rewards the wrong behavior or misses an important failure.
-
-For a mid-flight request, match the symptom to the phase that owns it rather than defaulting to the next step in sequence:
+Match the symptom to the phase that owns it. Do that phase directly rather than starting at the top of the pipeline:
 
 - "The scorer disagrees with humans, flip-flops, or seems gameable" → `phases/validate-scorer.md`, not trace mining or optimization.
 - "We don't know what's failing yet, or only have production/experiment logs" → `phases/mine-traces.md`.
@@ -40,33 +28,25 @@ For a mid-flight request, match the symptom to the phase that owns it rather tha
 - "We need a trustworthy number for where things stand today" → `phases/run-regressions.md`.
 - "The metric itself is questionable, or a new risk or claim surfaced" → `phases/design.md`.
 - "The metric and held-out evaluation are trusted, and we want the score to move" → `phases/optimize.md`.
+- "The thing being tuned is a prompt, and the loop has stalled" → `prompt-tuning.md`.
 
-When a symptom could plausibly map to more than one phase, pick the earliest one in the sequence above — fixing the metric or scorer before searching against it is cheaper than discovering the search was pointed at a broken instrument.
+For multi-phase work, sequence it as failure discovery, design, dataset construction, scorer implementation, scorer validation, baseline execution, optimization, then held-out confirmation. Re-enter design whenever evidence shows the metric rewards the wrong behavior or misses an important failure.
 
-If two routes remain plausible and choosing one would change the artifact, spend, permissions, or evidence needed, ask one focused question naming that difference. Otherwise take the earlier route and record the assumption.
+When a symptom maps to more than one phase, take the earlier one — fixing the instrument is cheaper than discovering the search was pointed at a broken one. If the choice would change the artifact, spend, permissions, or evidence needed, ask one focused question naming that difference; otherwise take the earlier route and record the assumption.
 
 ## Detect the platform
 
-Before opening platform notes, determine which platform applies and report three independent states for each candidate:
+Before opening platform notes, report three independent states for each candidate platform:
 
-| State | Evidence | Meaning |
-| --- | --- | --- |
-| Installed | repository dependency, config, executable, or connected tool | The platform can be used from this environment. |
-| Authenticated | local session evidence or an approved identity check | An account connection appears usable. |
-| Authorized for current data | explicit user approval or a repository policy that covers the named dataset, traces, prompts, outputs, and scores | The current material may be sent to that platform. |
+- **Installed** — a repository dependency, config, executable, or connected tool.
+- **Authenticated** — local session evidence, or an approved identity check.
+- **Authorized for current data** — explicit user approval, or a repository policy covering this dataset, traces, prompts, outputs, and scores.
 
-Check evidence in this order:
+Trust repository-local evidence — dependencies, lockfiles, call sites, eval config, scripts, project MCP config — over user-global config, login files, and unrelated MCP tools, which may be stale or belong to another project. Check credential variables for presence only; never print, hash, partially reveal, or persist a value. Do not run `whoami` or other networked identity checks unless the request authorizes that network call: a saved credential supports `Authenticated: unconfirmed`, nothing stronger.
 
-1. Inspect repository-local dependencies, lockfiles, call sites, eval config, scripts, and project MCP config. This evidence takes precedence because it belongs to the current project.
-2. Check relevant executables and local project configuration without making network calls.
-3. Check platform credential variables for presence only. Never print, hash, partially reveal, or persist their values.
-4. Treat user-global config, login files, and unrelated MCP tools as weak evidence. They may be stale or belong to another project.
+One platform with repository-local support wins. Several with comparable support means asking which owns the evaluation record. Only global credentials means reporting them as unconfirmed and continuing with repository scripts. No platform means plain scripts, and say so.
 
-Do not run `whoami`, account queries, or other networked identity checks unless the operating contract or the user's request authorizes that network action. A credential variable or saved login can support `authenticated: unknown or likely`; only local proof or an approved check can strengthen it.
-
-When one platform has clear repository-local support, select its local integration and report all three states. When several platforms have comparable repository-local support, ask which one owns the evaluation record. When only global credentials or tools exist, report them as stale or unconfirmed candidates and continue with repository scripts. When no platform is supported, proceed with plain scripts and say so.
-
-Detection never authorizes upload. Before sending traces, manifests, datasets, prompts, outputs, scores, or other project data, name the destination and data scope, confirm `authorized for current data: yes`, and obtain approval when the operating contract requires it. Keep private data local when authorization is absent or unclear.
+**Detection never authorizes upload.** Before sending any project data, name the destination and scope and confirm `Authorized for current data: yes`.
 
 ## Work proactively
 
@@ -114,7 +94,7 @@ Keep the reviewed contract limited to current decisions:
 | --- | --- | --- | --- |
 ```
 
-Keep tuning examples separate from the held-out set. This is a hard rule, not a preference: optimization must never read the held-out set's cases or labels, directly or through a scorer trained or tuned on them. If it did, the resulting result is invalid and must be discarded and rerun against a clean split, not just treated as weaker evidence. Record dataset, prompt, model, tool, and scorer versions for every result used in a decision. Treat critical safety, privacy, authorization, and irreversible-action failures as gates rather than averages.
+Record dataset, prompt, model, tool, and scorer versions for every result used in a decision. Treat critical safety, privacy, authorization, and irreversible-action failures as gates rather than averages.
 
 The `## Experiments` and `## Decisions` tables are a working log, not an archive. Once a table exceeds roughly 15-20 rows, move superseded rows to `evals/<short-name>/archive.md` and keep only the current baseline, active candidates, and recent decisions inline. Keep generated bulk output in the run-artifact location rather than pasting it into the contract.
 

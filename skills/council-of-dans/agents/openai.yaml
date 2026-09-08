@@ -3,4 +3,4 @@ interface:
   short_description: "Run the same task in parallel under different priorities"
   default_prompt: "Use $council-of-dans to run this task across parallel agents with different priorities and hand back what each produced."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

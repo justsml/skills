@@ -1,6 +1,7 @@
 ---
 name: council-of-dans
-description: "Fan one task out to parallel agents, each working under a different priority — Architect, Originalist, Unoriginalist, Radical, Visionary, Pennypincher, Minimalist, Inventor, Operator — then hand back every result. Use for important decisions, complex planning, alternative options, and trade-offs."
+description: "Fan one task out to parallel agents working under different priorities, then hand back every result. Use for important decisions, complex planning, alternative options, and trade-offs."
+disable-model-invocation: true
 ---
 
 # Council of Dans
@@ -9,45 +10,64 @@ Run the same task in parallel under different priorities, then present what each
 
 Scope ends at presenting. What happens next — return all of them, the fastest, the first to clear a rubric, pipe them into another tool, merge them — is the caller's call. Absent an instruction, hand back the set as it is.
 
+If the task has one defensible answer, do not fan out. Say so in one sentence and just do it.
+
 ## Knobs
 
-- `N`: candidate count. Default 2 when the model invokes this skill, 4 when the user invokes it by name. A user-supplied number wins.
+- `N`: candidate count. Default 3. A user-supplied number wins.
 - `personas`: required, excluded, or user-defined lenses.
+- `concurrency`: how many candidates run at once. Default: all `N`.
 - `disposition`: what to do with the results.
 
 Pass any other setting the user supplies — worktrees, output paths, models, reasoning effort — through to the candidates verbatim. Ask only when a missing knob changes the result.
 
 ## Personas
 
-| Persona | Priority |
+Builders own the whole task and produce a competing artifact.
+
+| Builder | Priority |
 |---|---|
 | Architect | Boundaries, ownership, contracts, invariants, migration paths |
-| Detail Detective | Concrete control and data paths — edge cases, state bugs, integration gaps, weak verification |
 | Originalist | Challenges the default framing and the familiar project pattern |
 | Unoriginalist | Reuses established patterns, dependencies, and test seams; reads docs and history before inventing |
 | Clean-slate Radical | First principles, best end state over smallest migration; names the compatibility breaks and irreversible choices |
 | Product Visionary | Starts from the user's workflow — behavior, discoverability, ergonomics |
-| Doomsayer | Breaks it before users do — failure modes, hidden costs, unsafe rollouts |
 | Ruthless Minimalist | Smallest coherent change that fully satisfies the task |
 | Genius Inventor | A non-obvious but implementable mechanism that materially improves the result |
+
+Critics attack one shared artifact and report what they would change. They do not produce competing solutions.
+
+| Critic | Hunts for |
+|---|---|
+| Detail Detective | Edge cases, state bugs, integration gaps, weak verification |
+| Doomsayer | Failure modes, hidden costs, unsafe rollouts |
 | Battle-scarred Operator | Deployment, observability, recovery, resource limits, day-two ownership |
-| Performance Wizard | Speed, memory, throughput; bottlenecks and their tradeoffs |
+| Performance Wizard | Bottlenecks in speed, memory, and throughput |
 | Pennypincher | Cost, complexity, dependencies, hidden maintenance |
 
-Add a task-specific persona when the task gives it something distinct to find: Security Paranoid, Privacy Zealot, Data Modeler, Accessibility Advocate, Test Saboteur, a sharp domain expert. Use Clean-slate Radical only when redesign is in scope.
+Run a critic as a builder when the task's whole point is that priority — a performance rewrite, a cost reduction, a hardening pass.
 
-The name supplies the worldview; the brief ties it to the work. Each candidate owns the whole task and does it for real — inspects the repo, makes the change, runs the checks — with the persona as an execution bias, not a writing style.
+**Picking three:** Architect, Ruthless Minimalist, and one persona matched to the task's main risk — Doomsayer for rollouts, Performance Wizard for hot paths, Battle-scarred Operator for anything on-call, Security Paranoid for auth or untrusted input. Add a task-specific persona (Privacy Zealot, Data Modeler, Accessibility Advocate, Test Saboteur, a sharp domain expert) when the task gives it something distinct to find. Use Clean-slate Radical only when redesign is in scope.
+
+The name supplies the worldview; the brief ties it to the work. Persona is an execution bias, not a writing style.
 
 ## Fan out
 
-Give each candidate the same task contract, one persona brief, and its own output location. Two briefs that would produce the same result are one candidate: combine or drop, and record in a sentence what decision each survivor could change.
+Launch all `N` candidates with the Agent tool **in a single message** so they run in parallel. With a concurrency cap, launch in batches of that size.
 
-Start one candidate and add the next only while local resources stay clear, up to `N`; pause on contention and resume when it clears. Candidates that write files never share a directory.
+Each candidate gets the same task contract, one persona brief, and its own output path. Two briefs that would produce the same result are one candidate: combine or drop, and record in a sentence what decision each survivor could change.
+
+Isolate them, in this order:
+
+1. **Read-only proposal (default).** The candidate inspects the repo and writes its plan or diff to `.scratch/council/<persona>/`. It does not touch tracked files.
+2. **Worktree.** When candidates must actually build and run checks, give each one its own git worktree (`git gtr`, or the `git-gtr` skill). Two candidates never share a directory.
 
 Ask each for its work plus a short rationale naming what it considered and rejected.
 
+If a candidate fails or drops out, record it and report what remains. Replace it only when the user asked for a fixed `N`.
+
 ## Present
 
-Report the personas and `N` used, each candidate's output and rationale, and any dropout or failure. Keep candidates distinct and attributed — no silent merging, ranking, or dropping.
+Report the personas and `N` used, each candidate's output path and rationale, and any dropout or failure. Keep candidates distinct and attributed — no silent merging, ranking, or dropping.
 
 Then carry out whatever disposition the user asked for.

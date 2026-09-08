@@ -23,7 +23,7 @@ Never invent facts, evidence, sources, opinions, personal experience, emotion, o
 
 ## Classify before editing
 
-Use three severity tiers. A listed word or punctuation mark is evidence to inspect, not an automatic violation.
+A listed word, construction, or punctuation mark is evidence to inspect, not an automatic violation.
 
 ### Must fix
 
@@ -48,7 +48,17 @@ Review these patterns in context and change them only when they make the passage
 - dense sentences, weak verbs propped up by adverbs, unnecessary hedging, and passive voice that hides a useful actor;
 - heavy use of headings, bold labels, colons, parentheses, dashes, or other punctuation that creates a mechanical rhythm.
 
-Words such as "crucial", "landscape", "leverage", and "robust" can be empty, but they can also be correct. Keep them when they carry the author's intended meaning or belong to the field's normal vocabulary. Judge dashes, semicolons, curly quotes, fragments, and long sentences by clarity and house style. Never replace punctuation only to satisfy a ban.
+Constructions carry more signal than single words. Watch for the negation-flip ("it's not just X, it's Y", "isn't merely a Z — it's a W"), the padded triad where only two items do work, the throat-clearing opener ("in today's landscape", "as we all know"), the participial tail bolted onto a finished sentence ("…, allowing teams to move faster"), and the summary sentence that restates the paragraph it ends.
+
+Words such as "crucial", "landscape", "leverage", "delve", "tapestry", and "robust" can be empty, but they can also be correct. Keep them when they carry the author's intended meaning or belong to the field's normal vocabulary. Judge dashes, semicolons, curly quotes, fragments, and long sentences by clarity and house style. Never replace punctuation only to satisfy a ban.
+
+An edit of the right size:
+
+> **Before:** In today's fast-moving landscape, our groundbreaking platform serves as a testament to what's possible — it's not just a tool, it's a partner, empowering teams to unlock their full potential.
+>
+> **After:** Our platform imports a ticket queue in about a minute, and support leads use it to route work without writing rules.
+
+The rewrite drops the opener, the negation-flip, and the unsupported praise, then replaces them with what the source could actually support. Where the source supports nothing concrete, the correct edit is shorter, not invented: "Our platform routes support tickets."
 
 ### Preserve deliberate choices
 
@@ -68,10 +78,9 @@ Do not force variation into text that is already clear. A light edit or no edit 
 1. Map the preservation contract from the source and request.
 2. Mark must-fix passages and contextual review candidates.
 3. Make the smallest edits that solve those problems.
-4. Read the result against the source. Confirm that every fact, quotation, citation, technical term, uncertainty marker, and deliberate style choice still has the same function.
-5. Remove any opinion, evidence, emotion, or experience introduced by the edit rather than supported by the source.
+4. Read the result against the source. Confirm that every fact, quotation, citation, technical term, uncertainty marker, and deliberate style choice still has the same function, and that the edit introduced no opinion, evidence, emotion, or experience the source does not support.
 
-Return the edited text in the requested format. Add an explanation only when the user asks for one or when a source conflict prevents a safe edit.
+If the text lives in a file, edit that file in place. Otherwise print the edited text in the requested format. Add an explanation only when the user asks for one or when a source conflict prevents a safe edit.
 
 ## Completion
 

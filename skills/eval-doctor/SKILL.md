@@ -31,17 +31,15 @@ Do not run paid evals or send repository data to hosted scanners, providers, or 
 
 Follow one representative case through dataset selection, candidate execution, scoring, aggregation, storage, comparison, and release decision. Then inspect the surrounding system for findings that would change quality, spend, speed, or confidence.
 
-Pay particular attention to:
+Hunt for these failures specifically:
 
-- whether metrics represent product claims and known failure modes
-- dataset versioning, split isolation, leakage, slices, and production feedback
-- scorer validity, calibration, nondeterminism, judge bias, and provenance
-- model and SDK lifecycle, structured outputs, batch or cached execution, routing, and token controls
-- concurrency, retry classification, backoff, rate limits, duplicate calls, and failure recovery
-- trace coverage, experiment identity, prompt and model versions, token and cost capture, latency distributions, and error visibility
-- reproducibility, CI gates, flaky thresholds, baseline age, artifact retention, and ownership
-- privacy, redaction, retention, regional processing, and unintended data export
-- workflow gaps where a small automation, shared abstraction, or feedback loop would remove recurring manual work
+- **The metric measures the wrong thing.** It does not represent a product claim or a known failure mode, or an aggregate hides the slice where the product actually fails.
+- **The split is not a split.** Tuning examples reach the held-out set through paraphrases, trace descendants, or a scorer fitted on them, and no versioning would reveal it.
+- **The scorer cannot fail.** It is uncalibrated, nondeterministic, biased toward one candidate, or it silently returns a passing score when the pipeline errors.
+- **Spend is unbounded.** No token or cost capture, no run budget, retries that re-run behavioral failures, duplicate calls, or an SDK and model past their supported life.
+- **A result cannot be reproduced or traced.** Missing run identity, prompt and model versions, artifact retention, CI gates, or ownership — and separately, private data leaving the repository through traces, uploads, or regional processing.
+
+Also note workflow gaps where a small automation or shared abstraction would remove recurring manual work.
 
 Measure before claiming an improvement. Use existing run data when possible. If evidence is missing, estimate a range from documented pricing and observed call shapes, show the assumptions, and label it an estimate. Never invent savings or performance gains.
 
@@ -61,7 +59,9 @@ Also record what is healthy and should remain unchanged. This prevents a future 
 
 ## Present the diagnosis
 
-Read [references/report.md](references/report.md) and write a self-contained HTML report to the OS temporary directory. Open it for the user and give them the absolute path. Keep the repository unchanged.
+Report the findings ranked, in the conversation: the detected stack, then `Do now`, `Plan`, `Investigate`, and `Watch`, each finding carrying its evidence, guidance, proposed change, and verification. Keep the repository unchanged.
+
+When the user wants something shareable, or the audit is large enough that ranked prose stops being scannable, offer an HTML report — read [references/report.md](references/report.md), write it to the OS temporary directory, and give them the absolute path.
 
 Surface serious findings as soon as the evidence is clear, especially leaked held-out data, silent scorer failures, uncontrolled spend, unsupported versions, missing usage records, or privacy risks. Do not hold these for the report.
 

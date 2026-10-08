@@ -1,7 +1,8 @@
 node_modules
 .DS_Store
 .scratch
-
+__pycache__/
+*.pyc
 
 # Local live evaluation receipts may contain task text.
 eval/results/

@@ -1,0 +1,75 @@
+# Web performance: frame pacing, visual behavior and delivery
+
+Read this for web targets. Start with the small browser pass below; open the payload/network branches only for observed concerns or a specific load-time request. Use independent evidence that answers different questions, rather than accumulating scores. Upstream guidance checked 2026-10-07; verify installed browser/protocol/tool versions.
+
+## Get low-level access and identify the real environment
+
+Use the environment's prescribed browser surface for navigation and inspection. When available, [Chrome DevTools MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp) supplies browser traces, network inspection and screenshots. If the available surface cannot expose the required evidence, establish an authorized profiling path: the MCP, an existing project harness, [Playwright CDPSession](https://playwright.dev/docs/api/class-cdpsession), [Puppeteer CDPSession](https://pptr.dev/api/puppeteer.cdpsession), or direct DevTools. The required capability is low-level measurement, not one mandatory package. Inspect capabilities and installed versions; don't invent MCP tool names. Explain the missing signal, why it matters, setup/access cost and fallback before consequential installation or access. A screenshot-only session cannot substantiate frame, raster or network-timing claims.
+
+Use a task-scoped browser profile/test account and only authorized flows. Verify any tool's external data behavior for private targets: current DevTools MCP documents optional CrUX URL queries and usage collection, with opt-out flags. Retain approved artifacts without unrelated account data or credentials; inspect HAR/trace contents before sharing.
+
+Record actual browser/build, viewport/device scale, display/refresh assumptions, CPU/network emulation, cache/service-worker state and GPU/driver/features. Compare headed and headless paths when rendering behavior matters, especially if CI runs differ from user experience. They are separate experiment strata, not interchangeable repetitions. Modern [Chrome shares the headless/headful implementation](https://developer.chrome.com/docs/automation-and-testing/headless); headed mode does not guarantee hardware acceleration and headless mode does not guarantee software rendering. Inspect `SystemInfo.getInfo` through browser-level CDP or equivalent supported diagnostics. Prioritize the representative user renderer and label software-rendering fallback results; request a real-device/user capture when the available environment cannot reproduce it.
+
+## Default browser pass
+
+Aim for smooth **60 FPS or better** during active animation/scroll on a capable target; match higher-refresh users where relevant. A 60 Hz interval is approximately 16.7 ms, 120 Hz 8.3 ms, and the application has less than the whole interval once other browser work is included. Define the practical frame/response gate from the display, operation and user goal. Idle/static pages need not render continuously, and a 60 Hz environment cannot demonstrate 120 FPS. See [rendering guidance](https://web.dev/articles/rendering-performance).
+
+Check cold load and one normal journey, then stress the important interactive region: sustained scrolling, rapid reversals, top/bottom jumps, selection/focus and navigation. Keep a small repeatable scenario matrix with normal, short and near-zero pauses. Briefly capture a trace plus a recording/filmstrip/screenshots; repeat timing without capture overhead. Match production build and representative desktop/mobile dimensions. The default pass looks for lost input, freezes, unstable scroll position, unfinished loads, visible jumps and history/state restoration—not only a Lighthouse number.
+
+For frame pacing, collect the distribution/time series of animation-frame gaps and long stalls, phase durations, and renderer/compositor frame evidence when available. `requestAnimationFrame` intervals measure callbacks, not guaranteed displayed frames; declare that proxy and correlate with a trace/video. Average FPS can conceal a one-second freeze. Long tasks (over 50 ms) are a coarse blocking signal, not the only missed-frame cause; repeated shorter work, decode/raster, layout or GPU pressure can break the frame budget. Distinguish the main thread, off-thread rendering and an overlay/scroll-lock state that intercepts input. Use the [Performance panel](https://developer.chrome.com/docs/devtools/performance/) or supported CDP tracing.
+
+Inspect video/filmstrip timestamps and selected frames around anomalies for loading gaps, missing content, flashes, font swaps, image placeholders, sticky/fixed elements, hydration transitions and scroll anchoring. Screenshots provide state evidence, not proof of smooth motion; screen recording can also drop frames. Correlate with timings rather than inferring a browser stall from a bad recording alone. Preserve original captures and annotation timestamps.
+
+Measure layout-shift events and affected elements alongside the visual pass. [CLS](https://web.dev/articles/cls) aggregates qualifying unexpected shifts into session windows; not every visible jump contributes, including certain shifts after recent user input. Lab load-only CLS can miss later interactions. Report the actual scoped CLS plus observed visual defects separately; a good score does not excuse flicker, and summing every layout-shift entry without its eligibility/window semantics is not CLS.
+
+## Input, scroll and history stress recipe
+
+| Journey | Drive and verify | What to investigate if it fails |
+|---|---|---|
+| Wheel/touch/trackpad scroll | Slow sweep, fast sweep, rapid reversals; pointer over and away from content where hover triggers work | Main-thread handlers, accidental hover/downloads, decode/raster, virtualization boundaries, long pauses |
+| Keyboard scroll | Focus the intended document or nested region; Page Up/Down, Home/End and platform equivalents (macOS Fn+Up/Down) | Focus/target, prevented defaults, trapped input, nested scroll/overscroll, inaccessible controls |
+| Top/bottom jumps | Alternate distant targets with normal/short/immediate pauses; assert final offset and stable expected extent | Smooth-scroll overlap, invalid jump harness, lazy content/height changes, scroll restoration |
+| Deep navigation | Follow a few representative routes; browser Back/Forward repeatedly; verify URL, content, scroll, focus and retained state | History handling, re-fetch/remount, scroll reset, transition flicker, back/forward cache differences |
+| Stateful overlay/deep link | Open a URL-backed popup/modal, close/back/forward, reload and directly enter that URL | Hydration/initial-state mismatch, duplicate requests, stale overlays, body scroll-lock cleanup |
+
+Use real conventional input rather than only assigning `scrollTop`; keep programmatic scroll as a separate diagnostic. Browser automation may expose `PageUp`/`PageDown` rather than physical Fn keys; record the semantic keys and platform mapping actually tested. Expected keyboard behavior depends on focus, editable fields and the component contract. When an intended scroll area cannot accept conventional keys, record an accessibility/usability finding and its effect on benchmark coverage. Treat a minor optional shortcut gap as lower priority than the performance blocker; escalate if keyboard users cannot access essential content. Do not classify unmoved content as a fast scroll or silently substitute pointer-only coverage.
+
+For smooth scrolling, separate **settled-transition** correctness from **interruption-stress** behavior. In the settled case, wait for the target and assert arrival before timing the next phase; in the stress case deliberately interrupt and check responsiveness/consistent final state. Trace `scroll-behavior`, scroll snap, containment/content visibility, forced synchronous layout, heavy shadows/filters/backdrop effects, sticky layers and overused `will-change` only where evidence implicates them. Disable one mechanism in an isolated arm to test causality; don't globally remove design or animation to win. Include reduced-motion behavior when relevant.
+
+Distinguish a real reload from SPA navigation and [back/forward cache restoration](https://web.dev/articles/bfcache). Record whether a navigation was persisted/restored or fetched anew; compare matching modes. Expected modal restoration and scroll policy are product requirements, not universal assumptions. Don't add/delete history entries or weaken focus/scroll semantics just to hide flicker.
+
+## Slow load: triangulate before editing
+
+For a load-time goal or observed delay, combine a repeatable lab audit with browser observation, a network waterfall and production build evidence. Run local [Lighthouse](https://developer.chrome.com/docs/lighthouse/performance/performance-scoring) when available and in scope; retain version, mode, throttling, raw metrics and report rather than only the weighted score. Distinguish lab metrics from field data and cold from warm/return visits. Hosted PageSpeed/CrUX services need appropriate URL/data scope. Use the audit to nominate a cause, then test the real operation and candidate with controlled measurements.
+
+Choose a branch from observed critical-path evidence:
+
+| Evidence | Next measurements | Candidate mechanisms to test |
+|---|---|---|
+| Large transfer/decode footprint | Asset inventory, encoded/decoded sizes, image dimensions/format, fonts, waterfall and raster/decode | Correctly sized assets, narrower preload/activation, format/compression changes, caching |
+| Large JS or long parse/execute/hydration | Production chunk/source-map analysis, runtime trace and JS coverage over real journeys | Split/defer eligible work, eliminate duplicates, reduce serialization/hydration and unnecessary client work |
+| Render-blocking or mostly unused CSS | Stylesheet dependencies, CSS rule usage across routes/states/viewports, HTML/stylesheet bytes | Route-specific CSS or small critical-CSS inline experiment, with cache/reuse and visual checks |
+| Slow individual origin/resource | Request initiator, timing phases, redirects, protocol/cache/CDN evidence and repeated external fetch timings | Remove unnecessary hops, colocate/self-host when appropriate, cache fixes, request scheduling |
+| Fast transfer but late display | Trace plus filmstrip, resource dependencies, layout/paint/decode, app/server spans | Correct the actual critical-path dependency instead of optimizing bytes blindly |
+
+Don't run exhaustive bundle/coverage/CDN investigations on a small healthy interaction-only target unless needed. Once an anomaly appears, use multiple **complementary** instruments to discriminate causes; correlated Lighthouse scores and repeated copies of the same timing are not independent proof.
+
+## Payload, bundles and coverage
+
+Inspect production output and what the public page actually requests. Track raw source/build bytes, actual encoded transfer bytes (Brotli/gzip), decoded resource bytes, cache hits and request counts separately. An artifact ZIP measures archive size, not browser wire cost or parse/execute work. Verify served compression/headers and cold/warm network transfers. Analyze route/chunk dependency graphs, duplicated packages, sourcemap attribution, fonts/images and raw HTML/embedded state; tiny bundles can still execute expensive work.
+
+[DevTools Coverage](https://developer.chrome.com/docs/devtools/coverage/) or supported JS precise coverage/CSS rule-usage tracking can report used versus unused code for the exercised session. State the denominator, coverage granularity, routes/interactions/viewports and observation window. Report **observed used percentage**, not “safe to delete percentage.” Exercise lazy routes, responsive variants, hover/focus/keyboard, error/loading states and themes as relevant before proposing removal; dynamically referenced or unvisited features may need the bytes later.
+
+Test small critical CSS inlining only when a stylesheet is demonstrated to delay the relevant paint. It can reduce a dependency but enlarge HTML, duplicate across routes, weaken cache reuse or cause visual flashes/CSP complications. Preserve CSS order, all necessary states and the actual security configuration. Measure cold/warm route behavior and compare transfer, paint and visual effects; don't inline the entire framework or claim fewer requests always means faster. Equivalent discipline applies to deferring JS, preconnect, preload and third-party resources: match actual criticality and avoid competing with useful work.
+
+## Delivery, CDN and route diagnosis
+
+Use the [network waterfall/timing breakdown](https://developer.chrome.com/docs/devtools/network/reference/) to separate queue/stall, DNS, connect/TLS, redirects, request/TTFB and body download. Attribute requests to origin, initiator, dependency, priority, protocol/connection reuse, cache/service worker and relevant headers. Many requests are not automatically a problem under multiplexing; serialized dependency chains, contention and connection constraints may be. A long TTFB is not proof of a distant CDN: origin work, cold misses, cache key, backend calls and congestion can also explain it.
+
+For a suspicious public asset, repeat a bounded fetch and inspect DNS/CNAME, remote address, cache/CDN headers, content encoding, redirect chain and timing. Compare authorized representative regions/devices or provider diagnostics if geography is consequential. Use targeted routing diagnostics only when they answer the hypothesis and access is authorized; do not scan infrastructure. IP geolocation or a CDN label does not prove a packet's physical path, and ICMP traceroute may differ from the HTTP route. Report a suspected geographic detour as a hypothesis until independent route/provider evidence supports it. Request CDN/origin logs, regional measurements or configuration access when needed to distinguish edge misses, routing and slow origin processing.
+
+[Resource Timing](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceResourceTiming) can have cross-origin visibility restrictions; missing/zero fields may reflect permission/cache semantics rather than zero bytes or zero cost. Prefer browser network/protocol evidence and explicitly mark unavailable breakdowns. Compare timing and bytes under the same workload/environment; changing CDN, compression and application code together prevents attribution. Confirm the selected change at the public route if deployment is authorized; local build output alone does not prove real delivery.
+
+## Deliver concise findings
+
+Use the cross-platform evidence format in [decisions](decisions.md#concise-findings-for-every-target). Include tested journeys/renderers/input methods, visual artifacts, frame/blocking metrics and any coverage/network investigations actually performed. Mark not-run or blocked checks honestly. Separate the performance issue from lower-priority usability findings and show their shared effect on testing. Lead with the result and next action, not a list of every DevTools event.

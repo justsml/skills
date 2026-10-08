@@ -2,6 +2,23 @@
 
 Fixture checks, synthetic routing, structural validation, and native agent execution measure different things.
 
+## Offline checks for the current collection
+
+These commands need no provider credentials or paid calls:
+
+```bash
+npm run eval:validate
+npm run eval:test
+npm run eval
+npm run helpers:test
+python3 -m unittest discover -s skills/remote-compute/scripts -p 'test_*.py'
+python3 -m unittest discover -s skills/auto-tune-performance/scripts -p 'test_*.py'
+```
+
+The Node/Python helper tests exercise local scaffolding/accounting and paired-comparison decisions. Node tests include Bash dispatch and cross-runtime parity when Python is available (otherwise parity is explicitly skipped). They do not provision a provider, enforce a watchdog, drive a browser or validate an agent's tuning quality. The collection's contract fixtures include remote budget/credential boundaries, repeat performance recipes, minimal/add-back experiments, scaling/architecture choices, and web visual/input/navigation/coverage/delivery cases. Real task execution remains a separate evidence layer.
+
+See [remote compute configuration](../skills/remote-compute/references/project-config.md), [performance comparison format](../skills/auto-tune-performance/references/decisions.md), and the [web-performance playbook](../skills/auto-tune-performance/references/web-performance.md) for the executable helper formats and workflow requirements.
+
 ## `npm run eval` — offline contract check
 
 - `cases/*.json` describes requests and gradeable expectations.

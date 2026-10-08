@@ -1,8 +1,8 @@
 {
   "name": "ai-skillz",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "private": false,
-  "description": "Agent skills for planning and operating AI work",
+  "description": "Agent skills for AI evaluation, performance tuning, remote compute, and writing",
   "license": "MIT",
   "author": {
     "name": "Dan Levy",
@@ -15,7 +15,8 @@
     "list": "./scripts/list-skills.sh",
     "link": "./scripts/link-skills.sh",
     "eval:validate": "node eval/validate-skills.mjs",
-    "eval:test": "node --test eval/*.test.mjs eval/scorers/*.test.mjs"
+    "eval:test": "node --test eval/*.test.mjs eval/scorers/*.test.mjs",
+    "helpers:test": "node --test skills/*/scripts/*.test.mjs"
   },
   "repository": {
     "url": "git@github.com:justsml/skills.git",

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Auto-Tune Performance"
+  short_description: "Profile bottlenecks and verify performance improvements"
+  default_prompt: "Use $auto-tune-performance to improve this workload with measured experiments while preserving correctness and product behavior."
+policy:
+  allow_implicit_invocation: true

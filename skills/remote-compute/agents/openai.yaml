@@ -1,0 +1,6 @@
+interface:
+  display_name: "Remote Compute"
+  short_description: "Configure remote workers and forecast their costs"
+  default_prompt: "Use $remote-compute to choose, configure, and monitor remote capacity for this project."
+policy:
+  allow_implicit_invocation: true

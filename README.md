@@ -40,13 +40,13 @@ npm run eval
 
 This grades the hand-written observations in `eval/baseline-results.json` against the cases in `eval/cases/*.json`. It is a fixture check: it catches cases and skills that have drifted apart, and proves nothing about model behavior.
 
-For that, run the routing eval against a real model:
+Probe skill selection against a real model:
 
 ```bash
 npm run eval:live
 ```
 
-It sends each case request to Claude Haiku 4.5 with nothing but the skill descriptions and grades which skill gets picked — the cheapest test that measures something real, well under a cent for the full suite. Needs `ANTHROPIC_API_KEY`. See [`eval/README.md`](./eval/README.md) for both runners and how to add a case.
+The routing probe uses GPT-6.1 Sol by default; GPT-6 Luna and Claude Sonnet 5.5 are selectable with `--model`. It checks skill descriptions, not agent task execution. OpenAI models need `OPENAI_API_KEY`; Sonnet needs `ANTHROPIC_API_KEY`. Every run saves raw evidence and model-specific cost estimates. Run `npm run eval:validate` for metadata checks and `npm run eval:test` for runner tests. See [`eval/README.md`](./eval/README.md) for usage and native Codex/Claude evaluation guidance, and the [council review](./docs/research/eval-setup-review.md) for findings.
 
 ## Pick a skill
 

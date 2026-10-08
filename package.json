@@ -13,7 +13,9 @@
     "eval": "node eval/run.mjs",
     "eval:live": "node eval/live.mjs",
     "list": "./scripts/list-skills.sh",
-    "link": "./scripts/link-skills.sh"
+    "link": "./scripts/link-skills.sh",
+    "eval:validate": "node eval/validate-skills.mjs",
+    "eval:test": "node --test eval/*.test.mjs eval/scorers/*.test.mjs"
   },
   "repository": {
     "url": "git@github.com:justsml/skills.git",

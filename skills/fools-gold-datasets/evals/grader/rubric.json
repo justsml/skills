@@ -18,12 +18,20 @@
               "Concentration (mg/mL)",
               "Mass (mg)"
             ],
-            "rows": 6
+            "rows": 6,
+            "volume_range": [
+              10,
+              5000
+            ],
+            "concentration_range": [
+              1,
+              300
+            ]
           }
         }
       ],
       "manual_review": [
-        "Open editable table and native equation; inspect units, arithmetic, clipping, ordinary document appearance and correspondence with gold. XML presence alone does not prove meaningful equation content."
+        "Open the editable table and native equation; confirm each row is a batch a teaching lab would actually make (isotonic saline at 9 mg/mL appears, nothing near NaCl's ~360 mg/mL solubility limit), units carry through the equation, nothing clips, and gold matches. XML presence alone does not prove meaningful equation content."
       ]
     },
     "infeasible-geometry": {
@@ -64,11 +72,11 @@
           "type": "lineage",
           "config": {
             "known_families": {
-              "src-a": "family-a",
-              "variant-a": "family-a",
-              "query-a": "family-a",
-              "renamed-a": "family-a",
-              "src-b": "family-b"
+              "permit-0117": "building-permit-0117",
+              "permit-0117-scan": "building-permit-0117",
+              "query-permit-0117-setback": "building-permit-0117",
+              "permit-0117-resaved": "building-permit-0117",
+              "invoice-5530": "freight-invoice-5530"
             }
           }
         }
@@ -87,7 +95,7 @@
         }
       ],
       "manual_review": [
-        "Confirm usable receipt and correct labels. A source-free task should not be blocked on dirty-side source description or unnecessary clean-room delegation."
+        "Confirm the receipt reconciles to the cent (quantity x unit price, subtotal, tax, total) and gold records the same figures. A source-free task should not be blocked on dirty-side source description or unnecessary clean-room delegation."
       ]
     },
     "restricted-clean-room": {
@@ -113,12 +121,12 @@
         {
           "type": "math",
           "config": {
-            "reference": "(x+1)/2",
+            "reference": "5*(x-32)/9",
             "test_points": [
-              -3,
-              0,
-              2,
-              7
+              -40,
+              32,
+              98,
+              212
             ],
             "expressions": [
               {
@@ -222,14 +230,17 @@
           "config": {
             "document": "document.svg",
             "expected_visible": [
-              "Dispatch register",
-              "Batch 14: 18 crates"
+              "Chilled dispatch note DN-4471",
+              "Ship 2026-11-03 06:30, hold at 1-4 C",
+              "Romaine hearts, 12 x 3: 18 cases",
+              "Strawberries, 8 x 1 lb: 6 cases",
+              "Total: 24 cases"
             ]
           }
         }
       ],
       "manual_review": [
-        "View the rendered SVG and confirm visible line order. Check that no hidden correctness layer was used as evaluation truth. SVG parser does not cover external CSS, clipping, occlusion, off-canvas text or PDF visibility."
+        "View the rendered SVG and confirm visible line order and that visible line items sum to the visible total. Check that no hidden correctness layer was used as evaluation truth. SVG parser does not cover external CSS, clipping, occlusion, off-canvas text or PDF visibility."
       ]
     },
     "challenge-geometry": {
@@ -255,12 +266,12 @@
         {
           "type": "math",
           "config": {
-            "reference": "(x**2+1)/(x+2)",
+            "reference": "x*(x-3)/2",
             "test_points": [
-              -1,
-              0,
               3,
-              8
+              4,
+              5,
+              12
             ],
             "expressions": [
               {

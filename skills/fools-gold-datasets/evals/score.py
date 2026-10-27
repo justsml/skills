@@ -281,6 +281,11 @@ def native(bundle, config):
         volume, concentration, mass = map(Fraction, row[1:])
         require(volume > 0 and concentration > 0 and abs(volume * concentration - mass) <= Fraction(1, 100),
                 "volume mL * concentration mg/mL must equal mass mg")
+        for name, number in (("volume", volume), ("concentration", concentration)):
+            low, high = config.get(f"{name}_range", (None, None))
+            require((low is None or number >= low) and (high is None or number <= high),
+                    f"physically implausible {name}")
+    require(len({tuple(r[1:]) for r in rows[1:]}) == config["rows"], "copied quantity rows")
     require(root.findall(".//m:oMath", w), "missing native Office math")
     require(not root.findall(".//w:drawing", w), "table/math replaced or supplemented by image")
     # Every body cell must be real visible text, not a hidden correctness layer.
@@ -497,6 +502,17 @@ def arithmetic(expression, x):
     return value(node)
 
 
+def implicit_products(expression):
+    """Make juxtaposed products explicit: 5(x-32), 9x, x(x-3), (a)(b). Adjacent numbers stay invalid."""
+    tokens = re.findall(r"\*\*|[0-9]+|\S", expression)
+    output = []
+    for token in tokens:
+        if output and (output[-1].isdigit() or output[-1] in ("x", ")")) and token in ("x", "("):
+            output.append("*")
+        output.append(token)
+    return " ".join(output)
+
+
 def math_expression(text, encoding):
     require(len(text.encode("utf-8")) <= MAX_MATH_BYTES, "math source byte limit")
     if encoding == "mathml":
@@ -505,13 +521,13 @@ def math_expression(text, encoding):
             if tag in ("math", "mrow", "semantics"):
                 return "".join(convert(c) for c in node if c.tag.rsplit("}", 1)[-1] not in ("annotation", "annotation-xml"))
             if tag in ("mi", "mn", "mo"):
-                return (node.text or "").strip().replace("−", "-").replace("×", "*").replace("·", "*")
+                return (node.text or "").strip().replace("−", "-").replace("×", "*").replace("·", "*").replace("\u2062", "*")
             if tag in ("mfrac", "msup"):
                 children = list(node)
                 require(len(children) == 2, "invalid math arity")
                 return f"({convert(children[0])}){'/' if tag == 'mfrac' else '**'}({convert(children[1])})"
             raise ValueError(f"unsupported MathML element: {tag}")
-        return convert(parse_xml(text.encode("utf-8")))
+        return implicit_products(convert(parse_xml(text.encode("utf-8"))))
     require(encoding == "tex", "unsupported math encoding")
     text = text.strip()
     if text.startswith("\\[") and text.endswith("\\]"): text = text[2:-2]
@@ -561,7 +577,7 @@ def math_expression(text, encoding):
                 offset += 1
         require(not group, "unclosed TeX brace")
         return "".join(output)
-    return sequence()
+    return implicit_products(sequence())
 
 
 

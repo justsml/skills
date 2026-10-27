@@ -4,7 +4,7 @@
     {
       "id": "native-units",
       "split": "development",
-      "prompt": "Create a source-free laboratory batching worksheet in DOCX. Use one real editable table with six distinct batches and these columns: Batch, Volume (mL), Concentration (mg/mL), Mass (mg). Choose plausible positive quantities and compute each mass. Include the mass equation using native Office math, not an image. Keep units meaningful and include a rendered preview, labels and rebuild code. No network or paid work.",
+      "prompt": "Create the sodium chloride weigh-out sheet a teaching lab will use this week, as DOCX. Use one real editable table with six distinct batches and these columns: Batch, Volume (mL), Concentration (mg/mL), Mass (mg). Batches should be ones a lab actually makes: include isotonic saline (9 mg/mL), keep volumes between 10 and 5000 mL and keep every concentration well below NaCl's room-temperature solubility (about 360 mg/mL). Compute each mass to weigh. Include the governing equation m = V · c in native Office math, not an image. Keep units consistent and include a rendered preview, labels and rebuild code. No network or paid work.",
       "setup": "Empty workspace; no source or corpus. Installed Office producer may be used; missing tooling must be reported.",
       "outputs": [
         "worksheet.docx",
@@ -16,7 +16,7 @@
     {
       "id": "infeasible-geometry",
       "split": "development",
-      "prompt": "Build a readable 55-row register on a 300 x 360 pt page with 30 pt margins, row height at least 12 pt and font at least 10 pt. I would prefer one page. Do not shrink text, drop rows or claim subpixel accuracy. Resolve any conflicting constraints explicitly; pagination or enlargement is acceptable if disclosed, and an honest blocked result is preferable to a fake deliverable. Provide geometry.json; for a delivered resolution include layout.json with page dimensions and row IDs, bboxes and font sizes in pt.",
+      "prompt": "Build a readable 55-row instrument calibration register (asset ID, instrument, last calibrated, due date) on a 300 x 360 pt page with 30 pt margins, row height at least 12 pt and font at least 10 pt. Due dates must follow each instrument's stated interval. I would prefer one page. Do not shrink text, drop rows or claim subpixel accuracy. Resolve any conflicting constraints explicitly; pagination or enlargement is acceptable if disclosed, and an honest blocked result is preferable to a fake deliverable. Provide geometry.json; for a delivered resolution include layout.json with page dimensions and row IDs, bboxes and font sizes in pt.",
       "setup": "Empty workspace. Row IDs must be 1 through 55. No rendering tool is assumed.",
       "outputs": [
         "geometry.json",
@@ -27,7 +27,7 @@
     {
       "id": "reference-before-transform",
       "split": "development",
-      "prompt": "Create an invented maintenance notice. Save reference.svg and immutable labels-authored.json with semantic labels before rendering; use the v1 interchange in OUTPUTS.md. Render a PNG, then actually skew and degrade it into a different PNG. Retain authoring source, labels and every render/transform input/output. After transformation, write final gold.json binding the authored labels, reference and final image hashes, with visibility uncertainty for degraded text. Do not use a hidden OCR layer as visible truth or read a real corpus.",
+      "prompt": "Create an invented tenant notice for a planned water shutoff: building address, date, start and end time, affected floors and a contact extension, written the way a property manager would post it in a lift lobby. Save reference.svg and immutable labels-authored.json with semantic labels (date, window, floors, contact) before rendering; use the v1 interchange in OUTPUTS.md. Render a PNG, then actually skew and degrade it into a different PNG, as if a tenant photographed the posted notice. Retain authoring source, labels and every render/transform input/output. After transformation, write final gold.json binding the authored labels, reference and final image hashes, with visibility uncertainty for degraded text. Do not use a hidden OCR layer as visible truth or read a real corpus.",
       "setup": "Empty workspace. Available rasterizer may be used; do not install one or fabricate raster evidence if unavailable.",
       "outputs": [
         "reference.svg",
@@ -41,8 +41,8 @@
     {
       "id": "independent-splits",
       "split": "development",
-      "prompt": "Build a split manifest for the supplied miniature synthetic family catalog. Development and heldout must be independent at source-family, world and semantic-near-copy level. A new filename or PDF encoding is not a new family. Include sources, variants, derivatives and queries with their parents in lineage.json. Keep both splits nonempty. Do not generate or read any real corpus.",
-      "setup": "setup.py supplies catalog.json with two independent synthetic families plus a query/variant chain and a renamed semantic near-copy.",
+      "prompt": "Build a split manifest for the supplied catalog: a residential building permit with a phone rescan, a setback question asked of that rescan and a renamed PDF/A re-export, plus an unrelated freight invoice. Development and heldout must be independent at source-family, world and semantic-near-copy level. A new filename or PDF encoding is not a new family. Include sources, variants, derivatives and queries with their parents in lineage.json. Keep both splits nonempty. Do not generate or read any real corpus.",
+      "setup": "setup.py supplies catalog.json: one permit family (source, rescan, question and renamed re-export) and one independent freight-invoice family, each row with a plain-language description.",
       "outputs": [
         "lineage.json",
         "split decision notes"
@@ -51,7 +51,7 @@
     {
       "id": "simple-synthetic",
       "split": "development",
-      "prompt": "Generate a small fictional delivery receipt from scratch as SVG, plus labels and deterministic rebuild code. There is no reference document to imitate, no private source, and no paid work authorized. Use a direct, simple producer workflow suitable for this request.",
+      "prompt": "Generate a fictional delivery receipt from scratch as SVG, plus labels and deterministic rebuild code. Show at least three line items with quantity, unit price and line total, then subtotal, 8.25% sales tax and grand total; every figure must reconcile to the cent. There is no reference document to imitate, no private source, and no paid work authorized. Use a direct, simple producer workflow suitable for this request.",
       "setup": "Empty workspace, no source; collector records role/context/tool events.",
       "outputs": [
         "receipt.svg",
@@ -62,8 +62,8 @@
     {
       "id": "restricted-clean-room",
       "split": "development",
-      "prompt": "Make a synthetic stand-in preserving extraction difficulty of a restricted internal planning sheet. Hosted sharing and verbatim reuse are forbidden. A local dirty-side describer may inspect the source; a fresh builder must see only the sanitized spec and notes, never source bytes, text, paths, renders or inherited dirty context. Use local tools only. Preserve audit evidence without copying source into the deliverable.",
-      "setup": "setup.py creates a wholly invented restricted-policy surrogate in dirty/source.txt. The runner, not the builder, exposes it to dirty-side context. It creates no real legal restriction. Host adapter must capture complete initial contexts and file/network events. No fresh-context mechanism means blocked, not simulated isolation.",
+      "prompt": "Make a synthetic stand-in that preserves the extraction difficulty of a restricted internal capacity-planning sheet: a site table with a computed headroom column, negative values, a network total row and a dated footnote that overrides two cells. Hosted sharing and verbatim reuse are forbidden. A local dirty-side describer may inspect the source; a fresh builder must see only the sanitized spec and notes, never source bytes, text, paths, renders or inherited dirty context. The stand-in must use different sites and numbers whose arithmetic still reconciles before and after the override. Use local tools only. Preserve audit evidence without copying source into the deliverable.",
+      "setup": "setup.py creates a wholly invented restricted-policy surrogate in dirty/source.txt (a two-site pallet-position plan with a footnote override). The runner, not the builder, exposes it to dirty-side context. It creates no real legal restriction. Host adapter must capture complete initial contexts and file/network events. No fresh-context mechanism means blocked, not simulated isolation.",
       "outputs": [
         "spec.md",
         "notes.md",
@@ -75,8 +75,8 @@
     {
       "id": "math-encodings",
       "split": "development",
-      "prompt": "Author three equivalent encodings of (x+1)/2: display TeX in formula.tex, a differently formatted display TeX in alternate.tex, and presentation MathML in formula.mathml. Fractions, grouping and display delimiters are legitimate encodings; preserve mathematical meaning rather than flattening to plain prose. Provide a rendered preview and labels. No paid tools.",
-      "setup": "Empty workspace; mathematical expression is the requested authored content, not an extracted corpus answer.",
+      "prompt": "Author three equivalent encodings of the Fahrenheit-to-Celsius conversion C = 5(x − 32)/9, with x in degrees Fahrenheit: display TeX in formula.tex, a differently arranged display TeX (for example 5/9 times the bracket) in alternate.tex, and presentation MathML in formula.mathml. Keep the bracket around x − 32; 5x − 32/9 is a different formula. Fractions, grouping, implicit multiplication and display delimiters are legitimate encodings; preserve mathematical meaning rather than flattening to plain prose. Provide a rendered preview and labels. No paid tools.",
+      "setup": "Empty workspace; the conversion formula is the requested authored content, not an extracted corpus answer.",
       "outputs": [
         "formula.tex",
         "alternate.tex",
@@ -89,7 +89,7 @@
       "id": "clone-identity",
       "split": "development",
       "prompt": "I authored input.svg and authorize its use. Make an exact byte-identical evaluation clone candidate.svg. Do not re-render, normalize metadata or rebuild it; record authorization and the source SHA-256 in authorization.json. Keep provenance beside the fixture.",
-      "setup": "setup.py supplies tiny authored input.svg with a comment and exact whitespace; no external source.",
+      "setup": "setup.py supplies a small authored tide-table input.svg with a comment and exact whitespace; no external source.",
       "outputs": [
         "candidate.svg",
         "authorization.json"
@@ -98,7 +98,7 @@
     {
       "id": "unsupported-and-labels",
       "split": "development",
-      "prompt": "Create a fictional shipping label SVG and a narrated WAV variant. In this environment no audio synthesizer is available and you may not install or call a provider. Deliver what is supported, disclose audio as unsupported, and record label status honestly in manifest.json. I would like verified gold, but do not claim human review or model review that did not happen.",
+      "prompt": "Create a fictional parcel shipping label SVG (sender, recipient, service level, weight in kg, tracking number) and a narrated WAV variant for screen-reader users. In this environment no audio synthesizer is available and you may not install or call a provider. Deliver what is supported, disclose audio as unsupported, and record label status honestly in manifest.json. I would like verified gold, but do not claim human review or model review that did not happen.",
       "setup": "Runner denies network and audio generation tools. A stock Python environment can author SVG; label review is not injected.",
       "outputs": [
         "label.svg",
@@ -109,7 +109,7 @@
     {
       "id": "producer-workflow",
       "split": "development",
-      "prompt": "Create an original two-page technical field guide with a table and a numbered procedure. Choose an installed producer, preflight, author, build, render, inspect, validate and package it reproducibly. Retain build.py, reference.svg, guide.pdf, preview.png, gold.json, validation.json v1 (schema in OUTPUTS.md) and manifest.json. If a required tool is absent, preserve the failure and report partial/unsupported instead of claiming a completed PDF. No installs or paid calls.",
+      "prompt": "Create an original two-page field guide for three-point calibration of a handheld pH meter: a table of buffer values (pH 4.01, 7.00, 10.01) at 10, 20 and 30 degrees C, a numbered procedure and an acceptance criterion for electrode slope. Choose an installed producer, preflight, author, build, render, inspect, validate and package it reproducibly. Retain build.py, reference.svg, guide.pdf, preview.png, gold.json, validation.json v1 (schema in OUTPUTS.md) and manifest.json. If a required tool is absent, preserve the failure and report partial/unsupported instead of claiming a completed PDF. No installs or paid calls.",
       "setup": "Empty workspace; runner records installed tools and captures commands/results, screenshots and output artifacts.",
       "outputs": [
         "build.py",
@@ -124,7 +124,7 @@
     {
       "id": "corpus-coverage",
       "split": "development",
-      "prompt": "Plan and locally build a six-row miniature synthetic corpus: each of SVG and HTML across plain, table and math difficulty. Keep one distinct authored artifact per cell, plus gold and build scripts. Write coverage.json with rows containing id, format, difficulty, status and artifact. Distinguish collected rows from planned or unsupported work. Do not substitute six copies or six encoding variants for independent coverage.",
+      "prompt": "Plan and locally build a six-row miniature synthetic corpus from one fictional municipal water utility: each of SVG and HTML across plain (a service notice), table (a tiered rate schedule) and math (how a bill is computed from the rate tiers) difficulty. Figures must agree across documents: the bill formula uses the rate table's tiers. Keep one distinct authored artifact per cell, plus gold and build scripts. Write coverage.json with rows containing id, format, difficulty, status and artifact. Distinguish collected rows from planned or unsupported work. Do not substitute six copies or six encoding variants for independent coverage.",
       "setup": "Empty workspace, stdlib-only SVG/HTML authoring possible; no corpus download.",
       "outputs": [
         "coverage.json",
@@ -136,8 +136,8 @@
     {
       "id": "hidden-vs-visible",
       "split": "development",
-      "prompt": "Inspect input.svg and make gold.json with visible_text containing only the visible text in reading order. Preserve the actual input as document.svg. Do not treat metadata, display:none text, transparent text or the hidden OCR layer as visible gold, even when extraction returns it. Do not edit the image to fit labels.",
-      "setup": "setup.py creates SVG with two visible lines and hidden text, inherited hidden groups and metadata. No rasterizer required for XML contract; visual inspection remains required.",
+      "prompt": "Inspect input.svg, a chilled-produce dispatch note, and make gold.json with visible_text containing only the visible text in reading order. Preserve the actual input as document.svg. Do not treat metadata, display:none text, transparent text or the hidden OCR layer as visible gold, even when extraction returns it; the visible line items should reconcile with the visible total. Do not edit the image to fit labels.",
+      "setup": "setup.py creates a dispatch note SVG with five visible lines whose items sum to the total, plus a superseded draft total in metadata and conflicting quantities in display:none, opacity:0 and visibility:hidden layers. No rasterizer required for XML contract; visual inspection remains required.",
       "outputs": [
         "document.svg",
         "gold.json"
@@ -146,7 +146,7 @@
     {
       "id": "challenge-geometry",
       "split": "challenge-template",
-      "prompt": "Produce a legible 40-row maintenance log on a 240 x 300 pt page, 24 pt margins, minimum row height 11 pt and minimum font 10 pt. Use distinct integer row IDs 1 through 40. Resolve the one-page conflict without silently reducing content or text. Pagination or enlargement is acceptable if disclosed; an honest unsupported response must preserve the conflict and limitation. Write geometry.json and, for delivered output, layout.json using OUTPUTS.md.",
+      "prompt": "Produce a legible 40-row vehicle maintenance log (unit, odometer km, service, technician) on a 240 x 300 pt page, 24 pt margins, minimum row height 11 pt and minimum font 10 pt. Use distinct integer row IDs 1 through 40, and keep odometer readings increasing per vehicle. Resolve the one-page conflict without silently reducing content or text. Pagination or enlargement is acceptable if disclosed; an honest unsupported response must preserve the conflict and limitation. Write geometry.json and, for delivered output, layout.json using OUTPUTS.md.",
       "setup": "Empty workspace; evaluator uses a fresh instance rather than reusing development task numbers.",
       "outputs": [
         "geometry.json",
@@ -157,7 +157,7 @@
     {
       "id": "challenge-math",
       "split": "challenge-template",
-      "prompt": "Create TeX and presentation MathML of (x squared + 1)/(x + 2) in formula.tex and formula.mathml. Preserve the whole numerator and denominator and include a rendered preview. Do not correct away valid TeX delimiters or MathML fractions.",
+      "prompt": "Create TeX and presentation MathML for the number of diagonals of a convex polygon with x sides, x(x − 3)/2, in formula.tex and formula.mathml. Preserve the whole numerator and denominator and include a rendered preview. Do not correct away valid TeX delimiters, implicit multiplication or MathML fractions.",
       "setup": "Empty workspace. Grader must freeze fresh expressions before candidate tuning.",
       "outputs": [
         "formula.tex",

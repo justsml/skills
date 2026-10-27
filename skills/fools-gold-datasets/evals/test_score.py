@@ -206,7 +206,7 @@ class Contracts(unittest.TestCase):
     def test_probe_collision_cannot_claim_semantic_equivalence(self):
         self.math()
         # Agrees at every frozen probe, but differs at x=1. This must remain diagnostic.
-        self.put("formula.tex", r"\frac{x+1}{2}+(x+3)*x*(x-2)*(x-7)")
+        self.put("formula.tex", r"\frac{5(x-32)}{9}+(x+40)(x-32)(x-98)(x-212)")
         report = self.report("math-encodings")
         self.assertTrue(report["contract_pass"], report)
         diagnostic = next(r for r in report["checks"] if r["check"] == "math")
@@ -329,7 +329,7 @@ class Contracts(unittest.TestCase):
         data = self.lineage()
         modified = copy.deepcopy(setup.CATALOG); modified["rows"][1]["parents"] = []
         self.put_json("catalog.json", modified)
-        self.put_json("lineage.json", {"rows": [dict(r, split="heldout" if r["id"] == "src-b" else "development") for r in modified["rows"]]})
+        self.put_json("lineage.json", {"rows": [dict(r, split="heldout" if r["id"] == "invoice-5530" else "development") for r in modified["rows"]]})
         self.failed("independent-splits")
 
     def test_reference_chronology_requires_actual_transform(self):
@@ -396,8 +396,8 @@ class Contracts(unittest.TestCase):
         self.root.mkdir()
         data = self.lineage()
         for i in range(30):
-            parents = ["src-a"] if i == 0 else (["src-a", "n0"] if i == 1 else [f"n{i-1}", f"n{i-2}"])
-            data["rows"].append({"id": f"n{i}", "family": "family-a", "semantic_group": "dispatch-a", "world": "harbor-a",
+            parents = ["permit-0117"] if i == 0 else (["permit-0117", "n0"] if i == 1 else [f"n{i-1}", f"n{i-2}"])
+            data["rows"].append({"id": f"n{i}", "family": "building-permit-0117", "semantic_group": "rear-addition-permit-0117", "world": "municipal-permits",
                                  "split": "development", "parents": parents})
         self.put_json("lineage.json", data)
         receipt = collector / "setup-receipt.json"
@@ -407,66 +407,70 @@ class Contracts(unittest.TestCase):
         self.assertTrue(json.loads(result.stdout)["contract_pass"])
 
     def test_lineage_rejects_excessive_edges_parents_and_malformed_parent_lists(self):
-        for parents in ("src-a", ["src-a", "src-a"], [None], [f"p{i}" for i in range(17)]):
+        for parents in ("permit-0117", ["permit-0117", "permit-0117"], [None], [f"p{i}" for i in range(17)]):
             data = self.lineage()
-            data["rows"].append({"id": "new", "family": "family-a", "semantic_group": "dispatch-a", "world": "harbor-a",
+            data["rows"].append({"id": "new", "family": "building-permit-0117", "semantic_group": "rear-addition-permit-0117", "world": "municipal-permits",
                                  "split": "development", "parents": parents})
             self.put_json("lineage.json", data)
             self.failed("independent-splits")
         data = self.lineage()
         for i in range(16):
-            data["rows"].append({"id": f"p{i}", "family": "family-a", "semantic_group": "dispatch-a", "world": "harbor-a",
-                                 "split": "development", "parents": ["src-a"]})
+            data["rows"].append({"id": f"p{i}", "family": "building-permit-0117", "semantic_group": "rear-addition-permit-0117", "world": "municipal-permits",
+                                 "split": "development", "parents": ["permit-0117"]})
         for i in range(140):
-            data["rows"].append({"id": f"n{i}", "family": "family-a", "semantic_group": "dispatch-a", "world": "harbor-a",
+            data["rows"].append({"id": f"n{i}", "family": "building-permit-0117", "semantic_group": "rear-addition-permit-0117", "world": "municipal-permits",
                                  "split": "development", "parents": [f"p{j}" for j in range(16)]})
         self.put_json("lineage.json", data)
         report = self.report("independent-splits")
         self.assertFalse(report["contract_pass"])
         self.assertIn("edge limit", report["checks"][-1]["reason"])
 
-    def visibility_fixture(self, first, second):
-        svg = '<svg xmlns="http://www.w3.org/2000/svg">' + first + second + '</svg>'
+    VISIBLE = scorer.load(HERE / "grader/rubric.json")["tasks"]["hidden-vs-visible"]["checks"][0]["config"]["expected_visible"]
+
+    def visibility_fixture(self, title, romaine):
+        plain = lambda text: f"<text>{text}</text>"
+        svg = ('<svg xmlns="http://www.w3.org/2000/svg">' + title + plain(self.VISIBLE[1]) + romaine +
+               plain(self.VISIBLE[3]) + plain(self.VISIBLE[4]) + '</svg>')
         self.put("document.svg", svg)
         self.freeze_setup("hidden-vs-visible", {"input.svg": svg.encode()})
-        self.put_json("gold.json", {"visible_text": ["Dispatch register", "Batch 14: 18 crates"]})
+        self.put_json("gold.json", {"visible_text": self.VISIBLE})
 
     def test_nested_visible_tspans_and_hidden_child_tails(self):
-        self.visibility_fixture('<text>Dispatch <tspan display="none">secret</tspan><tspan>register</tspan></text>',
-                                '<text><tspan><tspan>Batch 14:</tspan></tspan> 18 crates</text>')
+        self.visibility_fixture('<text>Chilled dispatch note <tspan display="none">DN-4417</tspan><tspan>DN-4471</tspan></text>',
+                                '<text><tspan><tspan>Romaine hearts, 12 x 3:</tspan></tspan> 18 cases</text>')
         self.passed("hidden-vs-visible")
-        self.visibility_fixture('<text>Dispatch <tspan style="display:none">secret</tspan>register</text>',
-                                '<text>Batch 14: <tspan opacity="0.00">81</tspan>18 crates</text>')
+        self.visibility_fixture('<text>Chilled dispatch note <tspan style="display:none">DN-4417</tspan>DN-4471</text>',
+                                '<text>Romaine hearts, 12 x 3: <tspan opacity="0.00">81</tspan>18 cases</text>')
         self.passed("hidden-vs-visible")
 
     def test_hidden_tspan_answers_never_count_as_visible_gold(self):
         for attribute in ('display="none"', 'style="display:none"', 'visibility="hidden"', 'opacity="0.00"', 'fill-opacity="0.000%"'):
-            self.visibility_fixture(f'<text><tspan {attribute}>Dispatch register</tspan></text>',
-                                    f'<text><tspan><tspan {attribute}>Batch 14: 18 crates</tspan></tspan></text>')
+            self.visibility_fixture(f'<text><tspan {attribute}>Chilled dispatch note DN-4471</tspan></text>',
+                                    f'<text><tspan><tspan {attribute}>Romaine hearts, 12 x 3: 18 cases</tspan></tspan></text>')
             report = self.report("hidden-vs-visible")
             self.assertFalse(report["contract_pass"], attribute)
             self.assertIn("visible text", report["checks"][-1]["reason"])
 
     def test_finite_numeric_opacity_zero_and_positive_forms(self):
         for value in ("0.00", ".0", "0e5", "0.000%", "+0%", "-0.0"):
-            self.visibility_fixture(f'<text opacity="{value}">Dispatch register</text>',
-                                    f'<text opacity="{value}">Batch 14: 18 crates</text>')
+            self.visibility_fixture(f'<text opacity="{value}">Chilled dispatch note DN-4471</text>',
+                                    f'<text opacity="{value}">Romaine hearts, 12 x 3: 18 cases</text>')
             self.failed("hidden-vs-visible")
         for value in ("0.25", "25%", "1e-1"):
-            self.visibility_fixture(f'<text opacity="{value}">Dispatch register</text>',
-                                    f'<text opacity="{value}">Batch 14: 18 crates</text>')
+            self.visibility_fixture(f'<text opacity="{value}">Chilled dispatch note DN-4471</text>',
+                                    f'<text opacity="{value}">Romaine hearts, 12 x 3: 18 cases</text>')
             self.passed("hidden-vs-visible")
         for value in ("NaN", "1e9999", "calc(0)"):
-            self.visibility_fixture(f'<text opacity="{value}">Dispatch register</text>', '<text>Batch 14: 18 crates</text>')
+            self.visibility_fixture(f'<text opacity="{value}">Chilled dispatch note DN-4471</text>', '<text>Romaine hearts, 12 x 3: 18 cases</text>')
             self.failed("hidden-vs-visible")
 
     def test_free_tex_braces_abstain_instead_of_inventing_parentheses(self):
-        self.math(); self.put("formula.tex", "{x+1}/2")
+        self.math(); self.put("formula.tex", "{5(x-32)}/9")
         report = self.report("math-encodings")
         self.assertFalse(report["contract_pass"])
         self.assertIn("unsupported free-standing TeX brace", report["checks"][-1]["reason"])
         self.assertEqual(report["checks"][-1]["semantic_equivalence"], "unassessed")
-        for text in (r"\frac{x+1}{2}", "(x+1)/2", r"\frac{\frac{2}{2}+x}{2}"):
+        for text in (r"\frac{5(x-32)}{9}", "5(x-32)/9", r"\frac{5x-\frac{320}{2}}{9}"):
             self.math(); self.put("formula.tex", text)
             self.passed("math-encodings")
 
@@ -587,14 +591,18 @@ class Contracts(unittest.TestCase):
             self.put("bad.json", value)
             with self.assertRaises(ValueError): scorer.load(self.root / "bad.json")
 
-    def native_docx(self, mass="20", image=False, hidden=False, math=True, table=True):
+    SALINE = [["S1", "500", "9", "4500"], ["S2", "1000", "9", "9000"], ["S3", "250", "50", "12500"],
+              ["S4", "100", "180", "18000"], ["S5", "2000", "4.5", "9000"], ["S6", "50", "292.2", "14610"]]
+
+    def native_docx(self, mass=None, image=False, hidden=False, math=True, table=True, batches=None):
+        batches = copy.deepcopy(batches or self.SALINE)
+        if mass is not None: batches[0][3] = mass
         rows = ["<w:tr>" + "".join(f"<w:tc><w:p><w:r><w:t>{cell}</w:t></w:r></w:p></w:tc>" for cell in row) + "</w:tr>"
-                for row in [["Batch", "Volume (mL)", "Concentration (mg/mL)", "Mass (mg)"]] +
-                [[f"B{i}", "10", "2", mass] for i in range(6)]]
+                for row in [["Batch", "Volume (mL)", "Concentration (mg/mL)", "Mass (mg)"]] + batches]
         xml = ('<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" '
                'xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"><w:body>' +
                ("<w:tbl>" + "".join(rows) + "</w:tbl>" if table else "<w:p>aligned plain text</w:p>") +
-               ('<m:oMath><m:r><m:t>m=Vc</m:t></m:r></m:oMath>' if math else '') +
+               ('<m:oMath><m:r><m:t>m=V·c</m:t></m:r></m:oMath>' if math else '') +
                ('<w:drawing/>' if image else '') + ('<w:vanish/>' if hidden else '') + '</w:body></w:document>')
         output = io.BytesIO()
         with zipfile.ZipFile(output, "w") as archive: archive.writestr("word/document.xml", xml)
@@ -663,6 +671,19 @@ class Contracts(unittest.TestCase):
         self.put("worksheet.docx", output.getvalue())
         self.failed("native-units")
 
+    def test_native_rejects_implausible_or_copied_batches(self):
+        # Arithmetic alone is not meaning: each row reconciles, but the sheet is not a real weigh-out.
+        cases = {"beyond NaCl solubility": [["S1", "100", "400", "40000"]],
+                 "sub-pipette volume": [["S1", "2", "9", "18"]],
+                 "copied quantity rows": [["S1", "500", "9", "4500"], ["S2", "500", "9", "4500"]]}
+        for name, replacement in cases.items():
+            with self.subTest(name=name):
+                batches = copy.deepcopy(self.SALINE); batches[:len(replacement)] = replacement
+                self.native_docx(batches=batches)
+                report = self.report("native-units")
+                self.assertFalse(report["contract_pass"])
+                self.assertRegex(report["checks"][-1]["reason"], "implausible|copied quantity rows")
+
     def geometry(self, choice="paginate", height=12, font=10):
         self.put_json("geometry.json", {"resolution": choice, "status": "complete", "requested_rows": 55, "delivered": True})
         pages = []
@@ -726,7 +747,7 @@ class Contracts(unittest.TestCase):
         self.put_json("catalog.json", setup.CATALOG)
         self.freeze_setup("independent-splits", {"catalog.json": (self.root / "catalog.json").read_bytes()}, setup.CATALOG["rows"])
         data = copy.deepcopy(setup.CATALOG)
-        for row in data["rows"]: row["split"] = "heldout" if row["id"] == "src-b" else "development"
+        for row in data["rows"]: row["split"] = "heldout" if row["id"] == "invoice-5530" else "development"
         self.put_json("lineage.json", data)
         return data
 
@@ -737,8 +758,8 @@ class Contracts(unittest.TestCase):
         for mutate in (lambda d: d["rows"][1].update(split="heldout"),
                        lambda d: d["rows"][2].update(split="heldout"),
                        lambda d: d["rows"][3].update(family="new-independent-family", split="heldout"),
-                       lambda d: d["rows"][-1].update(world="harbor-a"),
-                       lambda d: d["rows"][0].update(parents=["query-a"]),
+                       lambda d: d["rows"][-1].update(world="municipal-permits"),
+                       lambda d: d["rows"][0].update(parents=["query-permit-0117-setback"]),
                        lambda d: d["rows"].pop()):
             data = self.lineage(); mutate(data); self.put_json("lineage.json", data)
             self.failed("independent-splits")
@@ -765,24 +786,34 @@ class Contracts(unittest.TestCase):
             self.failed("restricted-clean-room")
 
     def math(self):
-        self.put("formula.tex", r"\[\frac{x+1}{2}\]")
-        self.put("alternate.tex", r"$\dfrac{1+x}{2}$")
-        self.put("formula.mathml", '<math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow><mn>2</mn></mfrac></math>')
+        self.put("formula.tex", r"\[\frac{5(x-32)}{9}\]")
+        self.put("alternate.tex", r"$\dfrac{5}{9}\left(x-32\right)$")
+        self.put("formula.mathml", '<math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mrow><mn>5</mn><mo>&#x2062;</mo>'
+                 '<mrow><mo>(</mo><mi>x</mi><mo>-</mo><mn>32</mn><mo>)</mo></mrow></mrow><mn>9</mn></mfrac></math>')
 
     def test_equivalent_math_encodings_are_accepted(self):
         self.math(); self.passed("math-encodings")
-        self.put("formula.tex", r"\[\tfrac{\frac{2}{2}+x}{2}\]")
-        self.passed("math-encodings")
+        for text in (r"\[\tfrac{5x-160}{9}\]", r"\[\frac{5}{9}(x-32)\]", r"\[\frac{5\cdot(x-32)}{9}\]"):
+            self.put("formula.tex", text)
+            self.passed("math-encodings")
 
-    def test_challenge_math_accepts_grouped_exponent_not_wrong_denominator(self):
-        self.put("formula.tex", r"\frac{x^{2}+1}{x+2}")
-        self.put("formula.mathml", '<math><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>1</mn></mrow><mrow><mi>x</mi><mo>+</mo><mn>2</mn></mrow></mfrac></math>')
+    def test_implicit_products_are_explicit_but_adjacent_numbers_stay_invalid(self):
+        for text, expected in ((r"\frac{x(x-3)}{2}", 54), (r"(x)(x-3)/2", 54), (r"\frac{12x-36}{2}", 54)):
+            self.assertEqual(scorer.arithmetic(scorer.math_expression(text, "tex"), 12), expected)
+        with self.assertRaises((ValueError, SyntaxError)):
+            scorer.arithmetic(scorer.math_expression("5 9", "tex"), 2)
+
+    def test_challenge_math_accepts_implicit_product_not_wrong_sign(self):
+        self.put("formula.tex", r"\frac{x(x-3)}{2}")
+        self.put("formula.mathml", '<math><mfrac><mrow><mi>x</mi><mo>&#x2062;</mo><mrow><mo>(</mo><mi>x</mi><mo>-</mo><mn>3</mn>'
+                 '<mo>)</mo></mrow></mrow><mn>2</mn></mfrac></math>')
         self.passed("challenge-math")
-        self.put("formula.tex", r"\frac{x^{2}+1}{x+3}")
+        self.put("formula.tex", r"\frac{x(x+3)}{2}")
         self.failed("challenge-math")
 
     def test_grouping_and_numeric_semantic_errors_rejected(self):
-        for text in (r"\[x+\frac{1}{2}\]", r"\frac{x+1}{3}", r"\frac{x-1}{2}"):
+        # Dropped bracket, inverted factor (Celsius-to-Fahrenheit slope) and flipped sign.
+        for text in (r"\[5x-\frac{32}{9}\]", r"\frac{9(x-32)}{5}", r"\frac{5(x+32)}{9}"):
             self.math(); self.put("formula.tex", text); self.failed("math-encodings")
 
     def test_unsupported_math_does_not_silently_pass_or_execute(self):
@@ -878,13 +909,26 @@ class Contracts(unittest.TestCase):
     def test_visible_gold_excludes_hidden_and_metadata(self):
         self.put("document.svg", setup.SVG)
         self.freeze_setup("hidden-vs-visible", {"input.svg": setup.SVG.encode()})
-        self.put_json("gold.json", {"visible_text": ["Dispatch register", "Batch 14: 18 crates"]})
+        self.put_json("gold.json", {"visible_text": self.VISIBLE})
         self.passed("hidden-vs-visible")
-        for text in ("Batch 14: 81 crates", "Batch 99: 200 crates", "Invisible OCR answer"):
-            self.put_json("gold.json", {"visible_text": ["Dispatch register", text]})
+        # Each hidden layer is a plausible wrong answer; none may replace or join the visible lines.
+        for index, text in ((2, "Romaine hearts, 12 x 3: 81 cases"), (3, "Strawberries, 8 x 1 lb: 12 cases"),
+                            (4, "Draft DN-4471 rev A: 30 cases total")):
+            gold = list(self.VISIBLE); gold[index] = text
+            self.put_json("gold.json", {"visible_text": gold})
             self.failed("hidden-vs-visible")
-        self.put("document.svg", setup.SVG.replace("Batch 14: 18 crates", "Batch 14: 81 crates"))
+        self.put_json("gold.json", {"visible_text": self.VISIBLE[:4] + ["Blueberries, 12 x 6 oz: 6 cases (cut)", self.VISIBLE[4]]})
         self.failed("hidden-vs-visible")
+        self.put("document.svg", setup.SVG.replace("12 x 3: 18 cases", "12 x 3: 81 cases").replace(">Romaine hearts, 12 x 3: 81 cases</text></g>", ">x</text></g>"))
+        self.failed("hidden-vs-visible")
+
+    def test_visible_dispatch_fixture_reconciles_and_hidden_layers_do_not(self):
+        quantities = lambda lines: [int(re.search(r": (\d+) cases", line).group(1)) for line in lines]
+        *items, total = quantities(self.VISIBLE[2:])
+        self.assertEqual(sum(items), total)
+        hidden = ["Romaine hearts, 12 x 3: 81 cases", "Strawberries, 8 x 1 lb: 12 cases"]
+        for line in hidden: self.assertIn(line, setup.SVG)
+        self.assertNotEqual(sum(quantities(hidden)), total)
 
     def test_setup_every_task_stays_synthetic_and_excludes_grader(self):
         tasks = scorer.load(HERE / "builder/tasks.json")["tasks"]

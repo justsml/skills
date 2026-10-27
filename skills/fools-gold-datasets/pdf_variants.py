@@ -19,7 +19,8 @@ meta.json: {"Producer": "...", "Creator": "...", "Title": "...", "Author": "..."
 
 Output: variants/*.pdf plus variants/variants.jsonl with the parameters,
 warnings and a file-profile summary for each one. Run with `python3 -I` from
-the build venv; a missing gs or pikepdf is reported per variant, never skipped silently.
+the build venv. --out must be a new directory. Missing requested stages fail
+the affected variant; qpdf warnings may succeed, but stale/partial output cannot.
 """
 import argparse
 import os
@@ -28,6 +29,7 @@ import random
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -130,7 +132,7 @@ def qpdf_pass(src, dst, v):
         cmd += ["--recompress-flate", f"--compression-level={v['compression_level']}"]
     r = run(cmd + [str(dst)])
     if r.returncode not in (0, 3):  # 3 = succeeded with warnings
-        return f"qpdf failed ({r.returncode}): {r.stderr.decode('utf-8', 'replace')[:200]}"
+        raise RuntimeError(f"qpdf failed ({r.returncode}): {r.stderr.decode('utf-8', 'replace')[:200]}")
     return "qpdf warnings: " + r.stderr.decode("utf-8", "replace")[:160] if r.returncode == 3 else None
 
 
@@ -150,7 +152,7 @@ def summarize(pdf):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("base", help="base PDF (visible content to keep)")
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--out", required=True, help="new output directory; existing paths are never overwritten")
     ap.add_argument("--presets", default="", help="comma list of preset names, or 'all'")
     ap.add_argument("--matrix", type=int, default=0, help="also draw N random combinations from the axes")
     ap.add_argument("--seed", type=int, default=7)
@@ -179,43 +181,59 @@ def main():
 
     meta = json.load(open(a.meta)) if a.meta else None
     out = Path(a.out)
-    out.mkdir(parents=True, exist_ok=True)
-    work = out / ".work"
-    work.mkdir(exist_ok=True)
+    try:
+        out.mkdir(parents=True, exist_ok=False)
+    except FileExistsError:
+        print("output path already exists; choose a new directory to preserve prior evidence", file=sys.stderr)
+        return 2
     rows, failed = [], 0
     with open(out / "variants.jsonl", "w") as log:
         for name, v in chosen:
             warnings, cur = [], Path(a.base)
-            if v.get("gs"):
-                nxt = work / f"{name}.gs.pdf"
-                w = gs_pass(cur, nxt, v)
-                if w:
-                    warnings.append(w)
-                else:
-                    cur = nxt
-            if meta:
-                nxt = work / f"{name}.meta.pdf"
-                w = stamp(cur, nxt, meta)
-                if w:
-                    warnings.append(w)
-                else:
-                    cur = nxt
             dst = out / f"{Path(a.base).stem}.{name}.pdf"
-            w = qpdf_pass(cur, dst, v)
-            if w:
-                warnings.append(w)
-            ok = dst.exists()
+            ok, profile, error = False, None, None
+            try:
+                if dst.exists():
+                    raise RuntimeError("duplicate variant destination")
+                # Stage on the output filesystem so publication is atomic.
+                with tempfile.TemporaryDirectory(prefix=".variant-", dir=out) as staging:
+                    work = Path(staging)
+                    if v.get("gs"):
+                        nxt = work / "distilled.pdf"
+                        failure = gs_pass(cur, nxt, v)
+                        if failure:
+                            raise RuntimeError(failure)
+                        cur = nxt
+                    if meta is not None:
+                        nxt = work / "stamped.pdf"
+                        failure = stamp(cur, nxt, meta)
+                        if failure:
+                            raise RuntimeError(failure)
+                        cur = nxt
+                    fresh = work / "final.pdf"
+                    warning = qpdf_pass(cur, fresh, v)
+                    if warning:
+                        warnings.append(warning)
+                    with fresh.open("rb") as output:
+                        if output.read(5) != b"%PDF-":
+                            raise RuntimeError("converter did not produce a PDF")
+                    profile = summarize(fresh)
+                    if profile.get("error"):
+                        raise RuntimeError(profile["error"])
+                    fresh.replace(dst)
+                    ok = True
+            except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as exc:
+                error = str(exc)
             failed += not ok
             row = {"variant": name, "file": str(dst) if ok else None, "params": v, "warnings": warnings,
-                   "profile": summarize(dst) if ok else None}
+                   "profile": profile if ok else None, "error": error}
             rows.append(row)
             log.write(json.dumps(row) + "\n")
-            flag = "WARN " if warnings else "ok   "
+            flag = "FAIL " if not ok else "WARN " if warnings else "ok   "
             print(f"{flag}{name:<20} {row['profile'] and row['profile'].get('header_version')} "
                   f"lin={row['profile'] and row['profile'].get('linearized')} "
                   f"ppi={row['profile'] and row['profile'].get('ppi_median')} "
-                  f"{'; '.join(warnings)[:120]}", file=sys.stderr)
-    shutil.rmtree(work, ignore_errors=True)
+                  f"{error or '; '.join(warnings)[:120]}", file=sys.stderr)
     print(json.dumps({"variants": len(rows), "failed": failed, "log": str(out / "variants.jsonl")}))
     return 1 if failed else 0
 

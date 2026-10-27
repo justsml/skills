@@ -14,6 +14,7 @@
     "eval:live": "node eval/live.mjs",
     "list": "./scripts/list-skills.sh",
     "link": "./scripts/link-skills.sh",
+    "installer:test": "python3 -m unittest discover -s scripts -p 'test_*.py'",
     "eval:validate": "node eval/validate-skills.mjs",
     "eval:test": "node --test eval/*.test.mjs eval/scorers/*.test.mjs",
     "fools-gold:test": "python3 -m unittest discover -s skills/fools-gold-datasets/tests -v && python3 -m unittest discover -s skills/fools-gold-datasets/evals -v",

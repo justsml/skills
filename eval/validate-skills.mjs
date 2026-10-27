@@ -22,6 +22,27 @@ export function metadata(text, location) {
   if (!text.slice(m[0].length).trim()) throw new Error(`${location}: missing instructions`);
   return fields;
 }
+export function validateInvocationPolicy(fields, yaml, location) {
+  const lines = yaml.split(/\r?\n/);
+  const headers = lines.flatMap((line, index) => /^policy:/.test(line) ? [index] : []);
+  if (headers.length > 1) throw new Error(`${location}: duplicate policy section`);
+  const policy = [];
+  if (headers.length) {
+    if (!/^policy:[ \t]*(?:#.*)?$/.test(lines[headers[0]])) throw new Error(`${location}: policy requires block form`);
+    for (const line of lines.slice(headers[0] + 1)) {
+      if (!line.trim() || /^\s*#/.test(line)) continue;
+      if (!/^\s/.test(line)) break;
+      policy.push(line);
+    }
+  }
+  const settings = policy.filter(line => /^\s+allow_implicit_invocation:/.test(line));
+  if (settings.length > 1) throw new Error(`${location}: duplicate invocation policy`);
+  const setting = settings.length ? /^\s+allow_implicit_invocation:\s*(true|false)\s*(?:#.*)?$/.exec(settings[0]) : null;
+  if (settings.length && !setting) throw new Error(`${location}: invocation policy must be boolean`);
+  const claudeManual = fields['disable-model-invocation'] === 'true';
+  const codexManual = setting?.[1] === 'false';
+  if (claudeManual !== codexManual) throw new Error(`${location}: invocation mismatch: Claude manual-only=${claudeManual}, Codex manual-only=${codexManual}`);
+}
 export async function validateSkills() {
   const entries = (await readdir(path.join(root,'skills'),{withFileTypes:true})).filter(e=>e.isDirectory());
   const seen = new Set();
@@ -34,10 +55,7 @@ export async function validateSkills() {
     let yaml = '';
     try { yaml = await readFile(path.join(root,'skills',entry.name,'agents/openai.yaml'),'utf8'); }
     catch(error) { if(error.code !== 'ENOENT') throw error; }
-    // Report asymmetry for human review. These hosts support different policies.
-    const claudeManual = fields['disable-model-invocation'] === 'true';
-    const codexManual = /^  allow_implicit_invocation:\s*false\s*$/m.test(yaml);
-    if (claudeManual !== codexManual) console.warn(`REVIEW ${entry.name}: Claude manual-only=${claudeManual}, Codex manual-only=${codexManual}`);
+    validateInvocationPolicy(fields, yaml, source);
   }
   console.log(`Validated ${seen.size} skill metadata contracts`);
 }

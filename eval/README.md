@@ -132,3 +132,7 @@ Claude Code provides native `claude plugin eval` with an isolated with/without b
 For Codex, install only the skills under test in an isolated `.agents/skills/` workspace and capture `codex exec --json` evidence. Test `$skill-name` explicit invocation separately from implicit selection. CLI invocation alone is not proof that the intended skill loaded or that its steps executed. This change provides structural/proxy checks and a migration path; it does not claim native-harness behavior has been measured.
 
 Official guidance checked 2026-10-07: [Codex skills](https://developers.openai.com/codex/skills/), [Claude Code skills and evaluation](https://code.claude.com/docs/en/skills), [Claude plugins](https://code.claude.com/docs/en/plugins), [Sonnet 5.5 request changes](https://platform.claude.com/docs/en/models/sonnet-5-5/whats-new-sonnet-5-5), [Sonnet 5.5 pricing](https://platform.claude.com/docs/en/models/sonnet-5-5/overview).
+
+## Fool’s Gold artifact and agent evals
+
+Run `npm run fools-gold:test` for the local validator and artifact-contract regressions. See [Fool’s Gold behavioral assets](../skills/fools-gold-datasets/evals/README.md) for 14 realistic tasks, separate builder/grader inputs, evidence collection, negative controls and a paired no-skill/previous/revised-skill protocol. These offline tests do not execute an agent or prove rendered quality. Native traces, artifact inspection and independent grading remain necessary for a skill-performance claim.

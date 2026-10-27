@@ -1,0 +1,295 @@
+{
+  "version": 1,
+  "scale": {
+    "0": "Absent, wrong, fabricated, or violates a hard invariant",
+    "1": "Partial/honestly unsupported; usable evidence but task incomplete",
+    "2": "Complete, observed in artifacts and native trace; independently verified"
+  },
+  "tasks": {
+    "native-units": {
+      "checks": [
+        {
+          "type": "native",
+          "config": {
+            "document": "worksheet.docx",
+            "headers": [
+              "Batch",
+              "Volume (mL)",
+              "Concentration (mg/mL)",
+              "Mass (mg)"
+            ],
+            "rows": 6,
+            "volume_range": [
+              10,
+              5000
+            ],
+            "concentration_range": [
+              1,
+              300
+            ]
+          }
+        }
+      ],
+      "manual_review": [
+        "Open the editable table and native equation; confirm each row is a batch a teaching lab would actually make (isotonic saline at 9 mg/mL appears, nothing near NaCl's ~360 mg/mL solubility limit), units carry through the equation, nothing clips, and gold matches. XML presence alone does not prove meaningful equation content."
+      ]
+    },
+    "infeasible-geometry": {
+      "checks": [
+        {
+          "type": "geometry",
+          "config": {
+            "rows": 55,
+            "min_row_pt": 12,
+            "width_pt": 300,
+            "height_pt": 360,
+            "margin_pt": 30,
+            "min_font_pt": 10
+          }
+        }
+      ],
+      "manual_review": [
+        "Compare declared layout to rendered pages; reject inaccurate precision claims, tiny raster text, clipped rows, undisclosed page changes or a blocked response that hides a feasible authorized alternative."
+      ]
+    },
+    "reference-before-transform": {
+      "checks": [
+        {
+          "type": "authored",
+          "config": {
+            "reference": "reference.svg"
+          }
+        }
+      ],
+      "manual_review": [
+        "Inspect reference and final scan side by side; check degradation difficulty, label readability and authored reference content. Collector ordering must be corroborated against native trace; JSON order alone is forgeable.",
+        "Inspect saved pre-render semantic labels and PNG render/degradation outputs with original native trace offsets; changed bytes alone do not prove the required skew/noise or label readability."
+      ]
+    },
+    "independent-splits": {
+      "checks": [
+        {
+          "type": "lineage",
+          "config": {
+            "known_families": {
+              "permit-0117": "building-permit-0117",
+              "permit-0117-scan": "building-permit-0117",
+              "query-permit-0117-setback": "building-permit-0117",
+              "permit-0117-resaved": "building-permit-0117",
+              "invoice-5530": "freight-invoice-5530"
+            }
+          }
+        }
+      ],
+      "manual_review": [
+        "Compare every catalog item to lineage. Verify frozen splits and semantic deduplication from actual content in later corpus runs; copied declared group IDs are not independent dedup evidence."
+      ]
+    },
+    "simple-synthetic": {
+      "checks": [
+        {
+          "type": "route",
+          "config": {
+            "mode": "simple"
+          }
+        }
+      ],
+      "manual_review": [
+        "Confirm the receipt reconciles to the cent (quantity x unit price, subtotal, tax, total) and gold records the same figures. A source-free task should not be blocked on dirty-side source description or unnecessary clean-room delegation."
+      ]
+    },
+    "restricted-clean-room": {
+      "checks": [
+        {
+          "type": "route",
+          "config": {
+            "mode": "restricted",
+            "builder_inputs": [
+              "spec.md",
+              "notes.md"
+            ]
+          }
+        }
+      ],
+      "manual_review": [
+        "Inspect full builder context, tool reads, prompt lineage and sanitized spec for leaks; no copied source entities or denylisted passages. A local trace declaration alone cannot prove isolation. Verify actual candidate difficulty and no source packaged beside it.",
+        "Allow ordinary read/render/inspect/validate operations on earlier same-context clean outputs and independently setup-approved assets; reject dirty inputs, inherited context and outputs from other builders."
+      ]
+    },
+    "math-encodings": {
+      "checks": [
+        {
+          "type": "math",
+          "config": {
+            "reference": "5*(x-32)/9",
+            "test_points": [
+              -40,
+              32,
+              98,
+              212
+            ],
+            "expressions": [
+              {
+                "path": "formula.tex",
+                "encoding": "tex"
+              },
+              {
+                "path": "alternate.tex",
+                "encoding": "tex"
+              },
+              {
+                "path": "formula.mathml",
+                "encoding": "mathml"
+              }
+            ]
+          }
+        }
+      ],
+      "manual_review": [
+        "Inspect rendered equation and gold for grouping, missing symbols and semantic errors. Accept equivalent valid encodings. Unsupported parser syntax is a scorer limitation to adjudicate, not evidence that valid math is wrong.",
+        "Mandatory independent mathematical acceptance gate: numerical probes are diagnostic only; matching every probe does not establish semantic equivalence. Inspect full expression, grouping and domain, and record acceptance separately before promotion."
+      ]
+    },
+    "clone-identity": {
+      "checks": [
+        {
+          "type": "clone",
+          "config": {
+            "source": "input.svg",
+            "candidate": "candidate.svg",
+            "basis": "user-authored-authorized"
+          }
+        }
+      ],
+      "manual_review": [
+        "Check source authorization scope and that an identity request was honored rather than treated as perceptual similarity. No independent judge or clean-room build is needed for the byte copy.",
+        "Original-input identity is bound to the separate collector-owned setup receipt; the reviewer must still verify authorization scope and receipt custody."
+      ]
+    },
+    "unsupported-and-labels": {
+      "checks": [
+        {
+          "type": "status",
+          "config": {
+            "unavailable": [
+              "wav"
+            ]
+          }
+        }
+      ],
+      "manual_review": [
+        "Check SVG/gold correspondence and final user-facing limitations. No dummy WAV, renamed text, invented reviewer or false all-formats-complete claim. Missing runtime capability must be measured, not assumed by grader."
+      ]
+    },
+    "producer-workflow": {
+      "checks": [
+        {
+          "type": "workflow",
+          "config": {
+            "required_artifacts": [
+              "build.py",
+              "reference.svg",
+              "guide.pdf",
+              "preview.png",
+              "gold.json",
+              "validation.json",
+              "manifest.json"
+            ]
+          }
+        }
+      ],
+      "manual_review": [
+        "Run rebuild in a clean workspace and open real PDF/PNG. Validate two pages, native table/math where applicable, readability, package completeness and meaningful validation outputs. Placeholder extensions or empty files fail manual review; phase names alone cannot establish production quality. Honest tool block remains task-incomplete, not a fabricated completion."
+      ]
+    },
+    "corpus-coverage": {
+      "checks": [
+        {
+          "type": "coverage",
+          "config": {
+            "formats": [
+              "svg",
+              "html"
+            ],
+            "difficulties": [
+              "plain",
+              "table",
+              "math"
+            ]
+          }
+        }
+      ],
+      "manual_review": [
+        "Inspect actual native structures per stratum; different bytes alone do not prove semantic diversity. Verify row-level gold, lineage, per-cell support and coverage denominator. Full real-world corpus coverage cannot be inferred from these six rows."
+      ]
+    },
+    "hidden-vs-visible": {
+      "checks": [
+        {
+          "type": "visible",
+          "config": {
+            "document": "document.svg",
+            "expected_visible": [
+              "Chilled dispatch note DN-4471",
+              "Ship 2026-11-03 06:30, hold at 1-4 C",
+              "Romaine hearts, 12 x 3: 18 cases",
+              "Strawberries, 8 x 1 lb: 6 cases",
+              "Total: 24 cases"
+            ]
+          }
+        }
+      ],
+      "manual_review": [
+        "View the rendered SVG and confirm visible line order and that visible line items sum to the visible total. Check that no hidden correctness layer was used as evaluation truth. SVG parser does not cover external CSS, clipping, occlusion, off-canvas text or PDF visibility."
+      ]
+    },
+    "challenge-geometry": {
+      "checks": [
+        {
+          "type": "geometry",
+          "config": {
+            "rows": 40,
+            "min_row_pt": 11,
+            "width_pt": 240,
+            "height_pt": 300,
+            "margin_pt": 24,
+            "min_font_pt": 10
+          }
+        }
+      ],
+      "manual_review": [
+        "Use the same geometry rubric with a different domain and dimensions; independently inspect layout."
+      ]
+    },
+    "challenge-math": {
+      "checks": [
+        {
+          "type": "math",
+          "config": {
+            "reference": "x*(x-3)/2",
+            "test_points": [
+              3,
+              4,
+              5,
+              12
+            ],
+            "expressions": [
+              {
+                "path": "formula.tex",
+                "encoding": "tex"
+              },
+              {
+                "path": "formula.mathml",
+                "encoding": "mathml"
+              }
+            ]
+          }
+        }
+      ],
+      "manual_review": [
+        "Check semantic equivalence and valid rendering independently of parser support.",
+        "Mandatory independent mathematical acceptance gate: numerical probes are diagnostic only; matching every probe does not establish semantic equivalence. Inspect full expression, grouping and domain, and record acceptance separately before promotion."
+      ]
+    }
+  }
+}

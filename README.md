@@ -32,6 +32,12 @@ Then invoke it by name:
 Use $unslop to make this launch post sound like a real person wrote it.
 ```
 
+## Fool's Gold Datasets
+
+[`fools-gold-datasets`](./skills/fools-gold-datasets/SKILL.md) generates original synthetic documents, clean-room stand-ins and authorized clones with traceable silver labels. It separates meaningful authoring, measured layout, genuine native production, controlled variants and independent artifact verification. Detailed references cover tables and LaTeX/MathML/OMML, corpus diversity/splits, alternative producer strategies and evidence limits.
+
+Invoke `Use $fools-gold-datasets to build synthetic fixtures for this evaluation.` Run `npm run fools-gold:test` for local validator and artifact-contract regressions. [Behavioral eval assets](./skills/fools-gold-datasets/evals/README.md) define 14 tasks and a paired agent-trial protocol; passing the offline tests does not establish agent performance.
+
 ## Check skill behavior
 
 Check the skills against their cases offline, without credentials or network access:

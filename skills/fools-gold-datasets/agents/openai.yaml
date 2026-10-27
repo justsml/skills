@@ -1,0 +1,6 @@
+interface:
+  display_name: "Fool's Gold Datasets"
+  short_description: "Generate realistic, verifiable silver datasets"
+  default_prompt: "Use $fools-gold-datasets to generate meaningful native documents and silver datasets with authored references, measured rendering, reviewed labels, and protected splits; or build page-grounded retrieval/RAG/Q&A eval questions with independently checked facts."
+policy:
+  allow_implicit_invocation: true

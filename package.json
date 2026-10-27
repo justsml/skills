@@ -16,6 +16,7 @@
     "link": "./scripts/link-skills.sh",
     "eval:validate": "node eval/validate-skills.mjs",
     "eval:test": "node --test eval/*.test.mjs eval/scorers/*.test.mjs",
+    "fools-gold:test": "python3 -m unittest discover -s skills/fools-gold-datasets/tests -v && python3 -m unittest discover -s skills/fools-gold-datasets/evals -v",
     "helpers:test": "node --test skills/*/scripts/*.test.mjs"
   },
   "repository": {

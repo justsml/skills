@@ -71,6 +71,8 @@ Differentiate native text, text outlines, embedded screenshots, partial raster r
 
 Use `qpdf` for supported container/storage rewrites and inspect its resulting profile. A Ghostscript re-distill may change visible content, fonts or images; it is not automatically storage-only. `pdf_variants.py` offers presets, but each selected preset needs content and render checks. Do not falsify Producer/Creator to pretend an engine ran. Metadata perturbation is permitted as an explicit experimental factor with true history retained.
 
+Give `pdf_variants.py --out` a new directory for each attempt; an existing path is refused so previous artifacts and manifests survive. Requested conversion or metadata stages must succeed before a fresh PDF is published. Failed rows have a null file and an error, and the command exits nonzero. A successful qpdf warning remains visible. These checks establish fresh production, not visual or semantic fidelity.
+
 ## Other media
 
 For audio, preserve a script with speaker/turn IDs, timing and overlap before synthesis. Use available TTS voices/engines, mix measured room/noise conditions with ffmpeg/sox, and inspect intelligibility, prosody, disfluencies and boundaries. Clean TTS with added noise is not representative of all real speech. Timed authored text remains unverified until checked against the waveform.

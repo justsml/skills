@@ -11,6 +11,7 @@ npm run eval:validate
 npm run eval:test
 npm run eval
 npm run helpers:test
+npm run installer:test
 python3 -m unittest discover -s skills/remote-compute/scripts -p 'test_*.py'
 python3 -m unittest discover -s skills/auto-tune-performance/scripts -p 'test_*.py'
 ```
@@ -123,15 +124,35 @@ The runner rejects unknown fields, duplicate IDs, malformed regular expressions,
 ## Structural and native-harness checks
 
 
-Run `npm run eval:validate` before spending on model calls. It checks skill metadata, name/directory alignment, unique fields and instructions, and reports differences between Claude frontmatter invocation policy and Codex `agents/openai.yaml`. The parser supports the repository's single-line scalars and rejects unsupported multiline YAML. The `eval-expert` policy currently disables Codex implicit invocation but allows Claude implicit invocation; review this deliberate-or-accidental difference before changing its contract.
+Run `npm run eval:validate` before spending on model calls. It checks skill metadata, name/directory alignment, unique fields and instructions, and fails on differences between Claude frontmatter invocation policy and Codex `agents/openai.yaml`. The parser supports the repository's single-line frontmatter scalars and block-form invocation policy; it is not a general YAML or host-schema validator. `council-of-dans` is explicit-only on both hosts; the other six skills allow implicit selection. Use `$skill-name` in Codex and `/skill-name` in Claude Code for native explicit invocation.
 
 For actual behavior, use isolated task workspaces with fixture inputs, controlled tools and mocked external services, and compare the same tasks with and without the skill. Keep discovery/trigger tests separate from explicit invocation tests. Retain harness version, model, full instructions, raw trace, output artifacts, scorer version and usage for each trial. Required action tags need a trace reviewer or executable tool/artifact check; self-reported model tags alone are not proof. Report failure and informational denominators per skill and case kind. Calibration against blinded human labels, repeated trials and a held-out set precede release gating.
 
-Claude Code provides native `claude plugin eval` with an isolated with/without baseline, rubric grading, mocks and CI thresholds. This repository currently contains loose skills, not a plugin; package and validate a real plugin before using that seam. A validator that returns an empty component list does not validate these loose skills. When using native eval, override **both** `--model claude-sonnet-5-5` and `--judge-model claude-sonnet-5-5`: the installed CLI otherwise defaults the judge to Haiku. Use `--no-publish` and an explicit `--max-cost-usd` for a bounded local experiment. Do not automatically execute adversarial paid-host or secret-transfer requests against real credentials.
+Claude Code 2.1.310 recognizes this default `skills/` tree as a locally loadable plugin without a manifest. Run `claude plugin validate .` for local packaging and `claude plugin validate --profile directory .` for directory-submission requirements; passing either does not execute an agent task. A manifest is optional for local default-layout loading, but useful for a deliberate plugin name/version. Validate OpenAI plugin packaging separately before claiming publication support. See the [current Claude manifest reference](https://code.claude.com/docs/en/plugins-reference).
+
+For native Claude evals, verify the installed `claude plugin eval --help` and its component discovery first. Set the candidate and judge models explicitly, disable publishing, and supply a bounded cost cap using that version's supported flags. Do not automatically execute adversarial paid-host or secret-transfer requests against real credentials.
 
 For Codex, install only the skills under test in an isolated `.agents/skills/` workspace and capture `codex exec --json` evidence. Test `$skill-name` explicit invocation separately from implicit selection. CLI invocation alone is not proof that the intended skill loaded or that its steps executed. This change provides structural/proxy checks and a migration path; it does not claim native-harness behavior has been measured.
 
 Official guidance checked 2026-10-07: [Codex skills](https://developers.openai.com/codex/skills/), [Claude Code skills and evaluation](https://code.claude.com/docs/en/skills), [Claude plugins](https://code.claude.com/docs/en/plugins), [Sonnet 5.5 request changes](https://platform.claude.com/docs/en/models/sonnet-5-5/whats-new-sonnet-5-5), [Sonnet 5.5 pricing](https://platform.claude.com/docs/en/models/sonnet-5-5/overview).
+
+## Native release smoke matrix
+
+**Status: not executed.** Offline tests and local packaging checks do not close this evidence gap. Before claiming cross-host task compatibility, run the following in both Codex and Claude Code with only the skill under test installed. Use fresh isolated fixture workspaces, the host's explicit invocation syntax, and authorized models/budgets. Record host/model versions, skill hashes, permissions, native traces, outputs, usage and independent grading. Run an implicit positive and an adjacent negative from `cases/` separately; council must remain inactive without explicit invocation.
+
+| Skill | Minimal native task | Observable pass condition |
+| --- | --- | --- |
+| unslop | Edit a vague product paragraph with no supplied capabilities or timing | No new facts; supplied quotations and technical terms survive |
+| council-of-dans | Produce three read-only designs for a small local API under distinct priorities | Independent delegated results and attribution; tracked files unchanged; unavailable delegation disclosed |
+| eval-doctor | Audit a fixture eval runner with a scorer that passes on exceptions | Pinpoint the failure path with current official guidance; no implementation edits or uploads |
+| eval-expert | Design local scorer validation from supplied cases and human labels | Durable decision record, calibration and held-out boundaries; no unapproved provider calls |
+| auto-tune-performance | Optimize a fixture containing repeated parsing with an exact output oracle | Correctness preserved; baseline/candidate measurements and fresh confirmation, or an honest inconclusive result |
+| remote-compute | Set up an empty fixture project and report its saved status | Idempotent local config; paid authorization false; unknown costs explicit; no provisioning |
+| fools-gold-datasets | Create one original document with a table and independently checkable values | Native artifact, render and labels agree; provenance retained; unavailable production tools reported |
+
+For meaningful reliability claims, add repeated held-out trials and interruption, missing-tool, prompt-injection and prior-authorization cases. Grade actual tool events and artifacts, not self-reported action tags. Keep unsupported dimensions pending rather than marking the entire matrix passed from a routing score.
+
+For local installer checks, `npm run link -- --dest <isolated-directory>` overrides user destinations. Existing unrelated files, directories and symlinks are refused; links already pointing to this checkout are preserved. `npm run installer:test` exercises these cases without changing user installations.
 
 ## Fool’s Gold artifact and agent evals
 

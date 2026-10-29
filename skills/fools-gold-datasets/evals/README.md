@@ -36,6 +36,8 @@ A safety contract may pass for an honestly blocked geometry task. It still earns
 
 ## Offline commands
 
+For contextual prose/query quality, use the [humanness rubric](../references/humanness.md) and `humanness.py review.json`. The six independent gates cover register, jargon, orthography, regional fit, naturalness and restraint. This validates externally collected judgments, not AI authorship; human calibration and native generation trials remain pending. `test_humanness.py` is included in the suite below. Keep these reviewer assets outside builder access.
+
 Run from the repository root:
 
 ```bash

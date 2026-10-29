@@ -61,6 +61,8 @@ Reject cases with unsupported or contradictory facts, wrong units/signs, missing
 
 ## 7. Measure realism and difficulty separately
 
+Use [contextual humanness](humanness.md) for question-level jargon, spelling, regional grammar and restraint. Keep that gate separate from the discriminator below: plausible style does not establish factual correctness, and a detector score does not establish plausible style.
+
 Mix synthetic and authorized real questions, hide their origins, and train/evaluate a discriminator on **question text only**. Keep users/personas, near-duplicate questions and topic/source families disjoint across its train/test split. Match domain/language/length strata; remove packaging, IDs and formatting artifacts that trivially reveal origin. Neither generator nor tuning loop sees realism-test questions.
 
 Report ROC AUC with real/synthetic class convention, held-out sample counts, per-stratum values and family/user-clustered uncertainty. Chance discrimination is AUC 0.5; systematic separation in either direction signals a tell (a reversed classifier can be flipped). A value near chance is only evidence against that discriminator’s ability to distinguish the sets, not proof of realism or answer correctness. Predeclare the acceptable band and confidence rule in the project plan; do not choose them after seeing scores. Without real examples or adequate support, report realism unmeasured.

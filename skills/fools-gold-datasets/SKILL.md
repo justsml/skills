@@ -22,6 +22,7 @@ Read only the references needed:
 
 - **Finding input documents/media:** [sourcing-inputs.md](sourcing-inputs.md).
 - **Retrieval, search, RAG or Q&A eval sets:** [references/retrieval-questions.md](references/retrieval-questions.md).
+- **Humanlike prose or query style:** [references/humanness.md](references/humanness.md) defines contextual jargon, spelling, regional phrasing and restraint checks without rewarding artificial mistakes.
 - **Writing a buildable contract:** [spec-format.md](spec-format.md).
 - **Tables, math, native exports, scans or other media:** [production.md](production.md).
 - **Many families, variants, training/tuning/test splits:** [references/corpus-design.md](references/corpus-design.md).

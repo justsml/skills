@@ -53,14 +53,14 @@ The name supplies the worldview; the brief ties it to the work. Persona is an ex
 
 ## Fan out
 
-Launch all `N` candidates with the Agent tool **in a single message** so they run in parallel. With a concurrency cap, launch in batches of that size.
+Use the host's available delegation tools to launch independent candidates concurrently, up to its limits and the requested concurrency cap. Honor requested models and options. If delegation is unavailable, explain the limitation rather than presenting sequential role-play as independent agents.
 
 Each candidate gets the same task contract, one persona brief, and its own output path. Two briefs that would produce the same result are one candidate: combine or drop, and record in a sentence what decision each survivor could change.
 
 Isolate them, in this order:
 
-1. **Read-only proposal (default).** The candidate inspects the repo and writes its plan or diff to `.scratch/council/<persona>/`. It does not touch tracked files.
-2. **Worktree.** When candidates must actually build and run checks, give each one its own git worktree (`git gtr`, or the `git-gtr` skill). Two candidates never share a directory.
+1. **Read-only proposal (default).** The candidate inspects the repo and writes its plan or diff to a per-persona directory under the project-configured scratch location. It does not touch tracked files. Move deliverables to durable project storage before cleaning scratch.
+2. **Worktree.** When candidates must actually build and run checks, give each one its own git worktree (using the host's workspace orchestration or available Git worktree tooling). Two candidates never share a directory.
 
 Ask each for its work plus a short rationale naming what it considered and rejected.
 

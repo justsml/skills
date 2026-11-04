@@ -37,7 +37,7 @@ export function buildPersonaJudgePrompt({ prompt, persona, output }) {
   if (![prompt, output].every((value) => typeof value === "string" && value.trim())) {
     throw new Error("prompt and output must be non-empty strings");
   }
-  return `You are grading whether a response follows one Council of Dans persona while still completing the user's task.
+  return `You are grading whether a response follows one Council of Experts persona while still completing the user's task.
 
 USER TASK
 ${prompt}

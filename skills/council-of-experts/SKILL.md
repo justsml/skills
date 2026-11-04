@@ -1,10 +1,9 @@
 ---
-name: council-of-dans
+name: council-of-experts
 description: "Fan one task out to parallel agents working under different priorities, then hand back every result. Use for important decisions, complex planning, alternative options, and trade-offs."
-disable-model-invocation: true
 ---
 
-# Council of Dans
+# Council of Experts
 
 Run the same task in parallel under different priorities, then present what each agent produced.
 

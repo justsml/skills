@@ -76,14 +76,14 @@ Model parameter and pricing sources: [GPT-6.1 Sol](https://developers.openai.com
 
 ## Council persona examples
 
-`datasets/council-of-dans-personas.json` contains one-shot prompts, example candidate outputs, and rationale labels covering every built-in council persona. The examples span code generation, architecture, and security analysis so adherence is not conflated with one task shape.
+`datasets/council-of-experts-personas.json` contains one-shot prompts, example candidate outputs, and rationale labels covering every built-in council persona. The examples span code generation, architecture, and security analysis so adherence is not conflated with one task shape.
 
-`scorers/council-of-dans-persona.mjs` builds a reference-free LLM-judge prompt with asymmetric evidence requirements for each persona. It separately scores task completion and persona adherence; an incomplete artifact receives zero even if its voice resembles the persona. Use deterministic sampling only when the selected judge supports it (Sonnet 5.5 rejects nondefault temperature); retain the raw JSON and judge model/version, and calibrate the scorer against blinded human labels before using it as a release gate.
+`scorers/council-of-experts-persona.mjs` builds a reference-free LLM-judge prompt with asymmetric evidence requirements for each persona. It separately scores task completion and persona adherence; an incomplete artifact receives zero even if its voice resembles the persona. Use deterministic sampling only when the selected judge supports it (Sonnet 5.5 rejects nondefault temperature); retain the raw JSON and judge model/version, and calibrate the scorer against blinded human labels before using it as a release gate.
 
 Run its deterministic contract tests with:
 
 ```bash
-node --test eval/scorers/council-of-dans-persona.test.mjs
+node --test eval/scorers/council-of-experts-persona.test.mjs
 ```
 
 ## Add a case

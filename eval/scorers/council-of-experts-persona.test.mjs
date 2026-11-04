@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { buildPersonaJudgePrompt, parsePersonaJudgeResult, PERSONAS } from "./council-of-dans-persona.mjs";
+import { buildPersonaJudgePrompt, parsePersonaJudgeResult, PERSONAS } from "./council-of-experts-persona.mjs";
 
-const rows = JSON.parse(await readFile(new URL("../datasets/council-of-dans-personas.json", import.meta.url), "utf8"));
+const rows = JSON.parse(await readFile(new URL("../datasets/council-of-experts-personas.json", import.meta.url), "utf8"));
 
 test("dataset covers every council persona with a concrete example", () => {
   assert.deepEqual(new Set(rows.map((row) => row.persona)), new Set(PERSONAS));

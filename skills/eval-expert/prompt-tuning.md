@@ -40,7 +40,7 @@ Use when you need to know which parts of the prompt are doing the work before sp
 
 1. Ablate section by section — or statement by statement for a short prompt. Drop one, score the development set, restore it.
 2. Record each section's delta. That delta is what the section carries.
-3. Cut sections whose delta is zero or negative.
-4. Route your remaining effort by the deltas, not by how important a section looks.
+3. Treat zero or negative deltas as candidates for removal, subject to the full contract, rare-case gates, uncertainty and interaction checks. Redundant constraints can each appear unnecessary when removed individually.
+4. Use the deltas to identify dependence, then test concrete replacement hypotheses within the search budget.
 
-The routing rule is the point. A **load-bearing** section with a large delta has little room left — its residual failures are usually caused by something else, so tuning it further mostly wastes runs. A **marginal** section with a small positive delta is where outsized gains hide, because a small under-tuned part can carry disproportionate improvement once corrected. Do not spend equal effort on both ends of that spectrum.
+A deletion experiment measures dependence under the tested conditions, not the headroom of a better replacement. A load-bearing section can still be worth improving. Rank the next hypotheses by observed failures, plausible mechanism, expected benefit and test cost. Preserve hard requirements even when the development sample does not exercise them, and confirm the final combined prompt on fresh evidence.

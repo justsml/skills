@@ -6,3 +6,6 @@ __pycache__/
 
 # Local live evaluation receipts may contain task text.
 eval/results/
+
+# Local skill review artifacts.
+docs/reviews/

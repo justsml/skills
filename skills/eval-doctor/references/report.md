@@ -2,7 +2,7 @@
 
 Read this only when an HTML report was requested or offered and accepted. The default output is ranked findings in the conversation.
 
-Write a single HTML file named `<tmpdir>/eval-doctor-<repo>-<timestamp>.html`. Resolve the OS temporary directory from `$TMPDIR`, `/tmp`, or `%TEMP%`. Use inline CSS and JavaScript so the report remains readable offline. External links to official sources are expected. Avoid framework and charting CDNs unless a diagram truly needs one.
+Write a single HTML file named `<tmpdir>/eval-doctor-<repo>-<timestamp>.html`. Resolve the temporary directory from project or host instructions, then the configured `TMPDIR`/`TEMP` or OS temporary-directory API. Preserve a durable copy in the requested destination when the report must survive scratch cleanup. Use inline CSS and JavaScript so the report remains readable offline. External links to official sources are expected. Avoid framework and charting CDNs unless a diagram truly needs one.
 
 The report should feel like a technical diagnostic, not a generic dashboard. Make the evidence easy to scan and the priorities hard to misread.
 

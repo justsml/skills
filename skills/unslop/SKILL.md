@@ -54,11 +54,11 @@ Words such as "crucial", "landscape", "leverage", "delve", "tapestry", and "robu
 
 An edit of the right size:
 
-> **Before:** In today's fast-moving landscape, our groundbreaking platform serves as a testament to what's possible — it's not just a tool, it's a partner, empowering teams to unlock their full potential.
+> **Before:** Our platform imports ticket queues and lets support leads route work without writing rules. In today's fast-moving landscape, this groundbreaking platform serves as a testament to what's possible — it's not just a tool, it's a partner.
 >
-> **After:** Our platform imports a ticket queue in about a minute, and support leads use it to route work without writing rules.
+> **After:** Our platform imports ticket queues and lets support leads route work without writing rules.
 
-The rewrite drops the opener, the negation-flip, and the unsupported praise, then replaces them with what the source could actually support. Where the source supports nothing concrete, the correct edit is shorter, not invented: "Our platform routes support tickets."
+The rewrite retains the two supplied capabilities and removes unsupported praise. When the source supplies no concrete facts, flag the missing information or remove the unsupported claim; do not invent capabilities, customers or timing to make it specific.
 
 ### Preserve deliberate choices
 

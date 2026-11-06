@@ -7,6 +7,8 @@ description: "Fan one task out to parallel agents working under different priori
 
 Run the same task in parallel under different priorities, then present what each agent produced.
 
+Formerly named `$council-of-dans`.
+
 Scope ends at presenting. What happens next — return all of them, the fastest, the first to clear a rubric, pipe them into another tool, merge them — is the caller's call. Absent an instruction, hand back the set as it is.
 
 If the task has one defensible answer, do not fan out. Say so in one sentence and just do it.

@@ -1,8 +1,9 @@
 {
-  "council-of-experts.compare-designs":{"activated":true,"actions":["define-distinct-briefs","launch-parallel-candidates","isolate-candidates","present-all-candidates"],"output":"Candidate 1 (Architect), Candidate 2 (Ruthless Minimalist), Candidate 3 (Product Visionary). Each output path and rationale is listed below."},
+  "council-of-experts.compare-designs":{"activated":true,"actions":["define-distinct-briefs","launch-parallel-candidates","isolate-candidates","synthesize-candidates","attribute-synthesis"],"output":"Recommendation: the Architect's resource model with the Minimalist's single endpoint and the Product Visionary's error shapes. Candidate paths are listed below."},
   "council-of-experts.simple-edit":{"activated":false,"actions":["edit-file"],"output":"README typo fixed."},
-  "council-of-experts.pressure-test":{"activated":true,"actions":["present-all-candidates","apply-requested-disposition"],"output":"Candidate 1 and Candidate 2 are listed in full. Recommendation: use the staged migration."},
-  "council-of-experts.skip-comparison":{"activated":true,"actions":["isolate-candidates","present-all-candidates"],"output":"Candidate outputs stayed in separate directories and all three are reported here."},
+  "council-of-experts.pressure-test":{"activated":true,"actions":["synthesize-candidates","attribute-synthesis"],"output":"Candidate 1 and Candidate 2 are listed in full. Recommendation: use the staged migration."},
+  "council-of-experts.skip-comparison":{"activated":true,"actions":["isolate-candidates","synthesize-candidates"],"output":"Candidate outputs stayed in separate directories; all three were read and synthesized below."},
+  "council-of-experts.raw-set-only":{"activated":true,"actions":["present-all-candidates","apply-requested-disposition"],"output":"Candidate 1, Candidate 2, and Candidate 3 are listed in full without synthesis, as requested."},
   "council-of-experts.cost-aware-expansion":{"activated":true,"actions":["drop-redundant-brief","state-decision-each-candidate-changes"],"output":"Expansion decision: stop at two because the third brief would repeat the same architecture."},
   "council-of-experts.candidate-dropout":{"activated":true,"actions":["record-dropout","present-all-candidates"],"output":"Dropout: candidate C failed. Candidate A and Candidate B are reported below."},
   "council-of-experts.user-settings":{"activated":true,"actions":["honor-user-panel-size","honor-user-personas","honor-user-concurrency"],"output":"N: 3. Concurrency: 2. Using the requested personas."},

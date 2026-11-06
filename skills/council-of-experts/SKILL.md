@@ -1,15 +1,15 @@
 ---
 name: council-of-experts
-description: "Fan one task out to parallel agents working under different priorities, then hand back every result. Use for important decisions, complex planning, alternative options, and trade-offs."
+description: "Fan one task out to parallel agents working under different priorities, then synthesize the strongest parts into one recommendation. Use for important decisions, complex planning, alternative options, and trade-offs."
 ---
 
 # Council of Experts
 
-Run the same task in parallel under different priorities, then present what each agent produced.
+Run the same task in parallel under different priorities, then synthesize: weigh what each agent produced and combine the strongest parts into one recommended result.
 
 Formerly named `$council-of-dans`.
 
-Scope ends at presenting. What happens next — return all of them, the fastest, the first to clear a rubric, pipe them into another tool, merge them — is the caller's call. Absent an instruction, hand back the set as it is.
+Synthesis is the default deliverable. The caller can override it — return the raw set only, take the fastest, take the first to clear a rubric, pipe them into another tool — and an explicit instruction wins.
 
 If the task has one defensible answer, do not fan out. Say so in one sentence and just do it.
 
@@ -18,7 +18,7 @@ If the task has one defensible answer, do not fan out. Say so in one sentence an
 - `N`: candidate count. Default 3. A user-supplied number wins.
 - `personas`: required, excluded, or user-defined lenses.
 - `concurrency`: how many candidates run at once. Default: all `N`.
-- `disposition`: what to do with the results.
+- `disposition`: what to do with the results. Default: synthesize.
 
 Pass any other setting the user supplies — worktrees, output paths, models, reasoning effort — through to the candidates verbatim. Ask only when a missing knob changes the result.
 
@@ -67,8 +67,19 @@ Ask each for its work plus a short rationale naming what it considered and rejec
 
 If a candidate fails or drops out, record it and report what remains. Replace it only when the user asked for a fixed `N`.
 
+## Synthesize
+
+Read every candidate in full before judging any of them. Then:
+
+1. **Compare.** Line the candidates up on the decisions that matter: where they agree, where they conflict, and what only one of them saw. Agreement across different priorities is signal; a point only one persona raised is often the most valuable find.
+2. **Judge.** For each conflict, pick a side and say why, citing the task's constraints. Name the trade-off the losing side was protecting.
+3. **Combine.** Build one recommended result from the strongest parts: one candidate's structure, another's edge-case handling, a third's simplification. When parts are incompatible, choose one coherently rather than stitching contradictions together. Where a critic's finding holds, fold the fix in.
+4. **Attribute.** Tag each borrowed element with the persona it came from, and list what you rejected and why.
+
+Done means the caller holds one actionable result they could adopt as-is, plus the reasoning to trust it. If one candidate already dominates, say so and adopt it with the others' best fixes, instead of forcing a blend.
+
 ## Present
 
-Report the personas and `N` used, each candidate's output path and rationale, and any dropout or failure. Keep candidates distinct and attributed — no silent merging, ranking, or dropping.
+Lead with the synthesis: the recommended result, the key decisions with their winning rationale, and the rejected alternatives. Then the appendix: personas and `N` used, each candidate's output path and a one-line summary of its stance, and any dropout or failure. Keep the raw candidates intact at their paths so the caller can check the synthesis against them.
 
-Then carry out whatever disposition the user asked for.
+If the caller asked for a different disposition, carry that out instead and skip synthesis.

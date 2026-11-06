@@ -124,7 +124,7 @@ The runner rejects unknown fields, duplicate IDs, malformed regular expressions,
 ## Structural and native-harness checks
 
 
-Run `npm run eval:validate` before spending on model calls. It checks skill metadata, name/directory alignment, unique fields and instructions, and fails on differences between Claude frontmatter invocation policy and Codex `agents/openai.yaml`. The parser supports the repository's single-line frontmatter scalars and block-form invocation policy; it is not a general YAML or host-schema validator. `council-of-dans` is explicit-only on both hosts; the other six skills allow implicit selection. Use `$skill-name` in Codex and `/skill-name` in Claude Code for native explicit invocation.
+Run `npm run eval:validate` before spending on model calls. It checks skill metadata, name/directory alignment, unique fields and instructions, and fails on differences between Claude frontmatter invocation policy and Codex `agents/openai.yaml`. The parser supports the repository's single-line frontmatter scalars and block-form invocation policy; it is not a general YAML or host-schema validator. All skills allow implicit selection. Use `$skill-name` in Codex and `/skill-name` in Claude Code for native explicit invocation.
 
 For actual behavior, use isolated task workspaces with fixture inputs, controlled tools and mocked external services, and compare the same tasks with and without the skill. Keep discovery/trigger tests separate from explicit invocation tests. Retain harness version, model, full instructions, raw trace, output artifacts, scorer version and usage for each trial. Required action tags need a trace reviewer or executable tool/artifact check; self-reported model tags alone are not proof. Report failure and informational denominators per skill and case kind. Calibration against blinded human labels, repeated trials and a held-out set precede release gating.
 
@@ -138,12 +138,12 @@ Official guidance checked 2026-10-07: [Codex skills](https://developers.openai.c
 
 ## Native release smoke matrix
 
-**Status: not executed.** Offline tests and local packaging checks do not close this evidence gap. Before claiming cross-host task compatibility, run the following in both Codex and Claude Code with only the skill under test installed. Use fresh isolated fixture workspaces, the host's explicit invocation syntax, and authorized models/budgets. Record host/model versions, skill hashes, permissions, native traces, outputs, usage and independent grading. Run an implicit positive and an adjacent negative from `cases/` separately; council must remain inactive without explicit invocation.
+**Status: not executed.** Offline tests and local packaging checks do not close this evidence gap. Before claiming cross-host task compatibility, run the following in both Codex and Claude Code with only the skill under test installed. Use fresh isolated fixture workspaces, the host's explicit invocation syntax, and authorized models/budgets. Record host/model versions, skill hashes, permissions, native traces, outputs, usage and independent grading. Run an implicit positive and an adjacent negative from `cases/` separately.
 
 | Skill | Minimal native task | Observable pass condition |
 | --- | --- | --- |
 | unslop | Edit a vague product paragraph with no supplied capabilities or timing | No new facts; supplied quotations and technical terms survive |
-| council-of-dans | Produce three read-only designs for a small local API under distinct priorities | Independent delegated results and attribution; tracked files unchanged; unavailable delegation disclosed |
+| council-of-experts | Produce three read-only designs for a small local API under distinct priorities, then synthesize | Independent delegated results; one synthesized recommendation with per-persona attribution; tracked files unchanged; unavailable delegation disclosed |
 | eval-doctor | Audit a fixture eval runner with a scorer that passes on exceptions | Pinpoint the failure path with current official guidance; no implementation edits or uploads |
 | eval-expert | Design local scorer validation from supplied cases and human labels | Durable decision record, calibration and held-out boundaries; no unapproved provider calls |
 | auto-tune-performance | Optimize a fixture containing repeated parsing with an exact output oracle | Correctness preserved; baseline/candidate measurements and fresh confirmation, or an honest inconclusive result |

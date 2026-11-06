@@ -65,7 +65,7 @@ The routing probe uses GPT-6.1 Sol by default; GPT-6 Luna and Claude Sonnet 5.5 
 | Skill | Use it when you want to... | Try asking... |
 | --- | --- | --- |
 | [`unslop`](./skills/unslop/SKILL.md) | Remove stiff, generic AI writing without losing the original meaning | `Use $unslop to rewrite this README intro.` |
-| [`council-of-experts`](./skills/council-of-experts/SKILL.md) | Run the same task in parallel under different priorities and see every result (formerly `$council-of-dans`) | `Use $council-of-experts to pressure-test this API design.` |
+| [`council-of-experts`](./skills/council-of-experts/SKILL.md) | Run the same task in parallel under different priorities and get one synthesized recommendation built from the best of each (formerly `$council-of-dans`) | `Use $council-of-experts to pressure-test this API design.` |
 | [`eval-expert`](./skills/eval-expert/SKILL.md) | Build and run a complete evaluation program for an AI feature | `Use $eval-expert to design evals for our support bot.` |
 | [`eval-doctor`](./skills/eval-doctor/SKILL.md) | Audit an eval stack against current provider and platform guidance | `Use $eval-doctor to find the highest-value upgrades in our eval stack.` |
 | [`remote-compute`](./skills/remote-compute/SKILL.md) | Configure CPU/GPU workers, compare providers, check balances and usage, or run bounded remote jobs | `Use $remote-compute setup for this project, then compare GPU options within a $10 run budget.` |
